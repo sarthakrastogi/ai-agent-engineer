@@ -1,0 +1,8 @@
+{
+  "name": "agent-engineer",
+  "version": "0.1.0",
+  "description": "A senior AI agent engineer for your coding agent: design, tools, prompting, context, RAG, evals, observability, accuracy, guardrails and production for LLM agents.",
+  "keywords": ["agents", "llm", "rag", "evals", "observability"],
+  "skills": "./skills/",
+  "hooks": "./hooks/codex.json"
+}

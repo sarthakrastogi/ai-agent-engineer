@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [{"command": "python3 ./hooks/ae_hook.py session-start --harness cursor", "timeout": 10}],
+    "preToolUse": [{"command": "python3 ./hooks/ae_hook.py pre-write --harness cursor", "matcher": "Write", "timeout": 10}],
+    "postToolUse": [
+      {"command": "python3 ./hooks/ae_hook.py post-write --harness cursor", "matcher": "Write", "timeout": 10},
+      {"command": "python3 ./hooks/ae_hook.py post-bash --harness cursor", "matcher": "Shell", "timeout": 10}
+    ],
+    "stop": [{"command": "python3 ./hooks/ae_hook.py stop --harness cursor", "timeout": 10, "loop_limit": 1}]
+  }
+}

@@ -1,0 +1,30 @@
+{"id": "r01", "prompt": "I want to build an agent that triages our support tickets and drafts replies. Where do I start?", "expect": ["agent-engineer", "agent-design"]}
+{"id": "r02", "prompt": "Should this be one agent or a multi-agent system with an orchestrator and specialists?", "expect": ["agent-design"]}
+{"id": "r03", "prompt": "Which framework should I use for this, LangGraph or just the raw SDK?", "expect": ["agent-design"]}
+{"id": "r04", "prompt": "Help me design the tool definitions for my agent — it keeps calling the wrong tool.", "expect": ["agent-tools"]}
+{"id": "r05", "prompt": "I'm writing an MCP server for our CRM so agents can use it. How should I shape the tools?", "expect": ["agent-tools"]}
+{"id": "r06", "prompt": "Review my system prompt in prompts/support.md and tell me what to improve.", "expect": ["agent-prompting"]}
+{"id": "r07", "prompt": "The model keeps returning invalid JSON from my extraction prompt.", "expect": ["agent-prompting"]}
+{"id": "r08", "prompt": "My agent works for the first 20 turns then starts forgetting what it was doing.", "expect": ["agent-context"]}
+{"id": "r09", "prompt": "How do I add memory across sessions to my assistant?", "expect": ["agent-context"]}
+{"id": "r10", "prompt": "I need the bot to answer questions from our 5,000 internal PDFs.", "expect": ["agent-rag"]}
+{"id": "r11", "prompt": "Our RAG pipeline retrieves the wrong chunks. Should I change the chunk size or the embedding model?", "expect": ["agent-rag"]}
+{"id": "r12", "prompt": "How do I know if my agent is actually good? I want to add evals.", "expect": ["agent-evals"]}
+{"id": "r13", "prompt": "Set up an LLM-as-judge to grade whether answers are faithful to the sources.", "expect": ["agent-evals"]}
+{"id": "r14", "prompt": "I tweaked the prompt and it seems better on a couple of examples. Can I ship it?", "expect": ["agent-evals", "agent-accuracy"]}
+{"id": "r15", "prompt": "My agent hallucinates order numbers about 10% of the time. Fix it.", "expect": ["agent-accuracy"]}
+{"id": "r16", "prompt": "Accuracy dropped after we switched models last week. What happened?", "expect": ["agent-accuracy", "agent-production"]}
+{"id": "r17", "prompt": "Add tracing to my LangChain agent so I can see every tool call.", "expect": ["agent-observability"]}
+{"id": "r18", "prompt": "What should I log and monitor for my LLM app in production?", "expect": ["agent-observability"]}
+{"id": "r19", "prompt": "Can someone make my email agent forward private data with a malicious email?", "expect": ["agent-guardrails"]}
+{"id": "r20", "prompt": "Which tool calls should require human approval before my agent runs them?", "expect": ["agent-guardrails", "agent-design"]}
+{"id": "r21", "prompt": "My agent costs $2 per task and takes 40 seconds. How do I make it cheaper and faster?", "expect": ["agent-production"]}
+{"id": "r22", "prompt": "We want to upgrade from one model version to the next without breaking anything.", "expect": ["agent-production"]}
+{"id": "r23", "prompt": "Our long-running agent loses all progress when the worker restarts.", "expect": ["agent-production"]}
+{"id": "n01", "prompt": "Write a function that parses ISO dates in Python.", "expect": []}
+{"id": "n02", "prompt": "Fix the CSS so the header is centred.", "expect": []}
+{"id": "n03", "prompt": "Add a Postgres index for the users.email column.", "expect": []}
+{"id": "r24", "prompt": "We launch our support agent next week. What do we still need to check?", "expect": ["agent-engineer", "agent-production"]}
+{"id": "r25", "prompt": "I changed prompts/triage.md — is the new version better? We have an evals/ folder.", "expect": ["agent-evals"]}
+{"id": "r26", "prompt": "We inherited an eval suite from another team. Can we trust its numbers?", "expect": ["agent-evals"]}
+{"id": "r27", "prompt": "Should we split our agent into a planner and several specialist agents?", "expect": ["agent-design"]}

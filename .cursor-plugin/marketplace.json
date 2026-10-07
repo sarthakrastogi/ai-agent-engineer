@@ -1,0 +1,6 @@
+{
+  "name": "agent-engineer",
+  "owner": { "name": "Sarthak Rastogi" },
+  "metadata": { "description": "Agent engineering skills, subagents and hooks", "version": "0.1.0" },
+  "plugins": [ { "name": "agent-engineer", "source": "./" } ]
+}

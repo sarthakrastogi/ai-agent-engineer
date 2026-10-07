@@ -1,0 +1,9 @@
+{
+  "name": "agent-engineer",
+  "displayName": "Agent Engineer",
+  "version": "0.1.0",
+  "description": "A senior AI agent engineer for your coding agent: design, tools, prompting, context, RAG, evals, observability, accuracy, guardrails and production for LLM agents.",
+  "author": { "name": "Sarthak Rastogi" },
+  "license": "MIT",
+  "keywords": ["agents", "llm", "rag", "evals", "observability", "prompt-engineering", "context-engineering"]
+}

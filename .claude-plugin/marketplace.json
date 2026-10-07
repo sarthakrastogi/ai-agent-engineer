@@ -1,0 +1,14 @@
+{
+  "name": "agent-engineer",
+  "description": "Agent engineering skills, subagents and hooks for coding agents",
+  "owner": {
+    "name": "Sarthak Rastogi"
+  },
+  "plugins": [
+    {
+      "name": "agent-engineer",
+      "source": "./",
+      "description": "A senior AI agent engineer for your coding agent: design, RAG, evals, observability, accuracy and production for LLM agents."
+    }
+  ]
+}

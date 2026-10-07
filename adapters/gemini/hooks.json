@@ -1,0 +1,19 @@
+{
+  "SessionStart": [
+    {"matcher": "startup|resume|clear",
+     "hooks": [{"type": "command", "name": "agent-engineer-session-start", "command": "python3 \"{AE_ROOT}/hooks/ae_hook.py\" session-start --harness gemini", "timeout": 10000}]}
+  ],
+  "BeforeTool": [
+    {"matcher": "write_file|replace",
+     "hooks": [{"type": "command", "name": "agent-engineer-secret-guard", "command": "python3 \"{AE_ROOT}/hooks/ae_hook.py\" pre-write --harness gemini", "timeout": 10000}]}
+  ],
+  "AfterTool": [
+    {"matcher": "write_file|replace",
+     "hooks": [{"type": "command", "name": "agent-engineer-behaviour-change", "command": "python3 \"{AE_ROOT}/hooks/ae_hook.py\" post-write --harness gemini", "timeout": 10000}]},
+    {"matcher": "run_shell_command",
+     "hooks": [{"type": "command", "name": "agent-engineer-eval-tracker", "command": "python3 \"{AE_ROOT}/hooks/ae_hook.py\" post-bash --harness gemini", "timeout": 10000}]}
+  ],
+  "AfterAgent": [
+    {"hooks": [{"type": "command", "name": "agent-engineer-eval-gate", "command": "python3 \"{AE_ROOT}/hooks/ae_hook.py\" stop --harness gemini", "timeout": 10000}]}
+  ]
+}
