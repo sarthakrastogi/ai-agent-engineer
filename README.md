@@ -20,7 +20,7 @@ stages with you on *your* codebase. It doesn't generate a starter app, and it wo
 ## Install
 
 ```bash
-git clone <repo-url> ~/agent-engineer     # once; `git pull` to update
+git clone https://github.com/sarthakrastogi/ai-agent-engineer.git ~/agent-engineer
 ```
 
 | Tool | How |
@@ -30,7 +30,7 @@ git clone <repo-url> ~/agent-engineer     # once; `git pull` to update
 | **Cursor** | Install the plugin from GitHub, or run `~/agent-engineer/install.sh --harness cursor` |
 | **OpenCode** | `cd your-project && ~/agent-engineer/install.sh --harness opencode` |
 | **Gemini CLI** | `cd your-project && ~/agent-engineer/install.sh --harness gemini` |
-| **Skills only, any tool** | `npx skills add <repo-url>` |
+| **Skills only, any tool** | `npx skills add sarthakrastogi/ai-agent-engineer` |
 
 `install.sh` options:
 
