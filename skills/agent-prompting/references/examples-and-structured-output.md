@@ -77,7 +77,7 @@ raise OutputInvalid(out, errs)  # surface it; never silently coerce
 - **Feed back specific errors** ("`date` must be ISO-8601, got 'next Tuesday'"), not
   tracebacks.
 - **Bound and log retries.** A rising retry rate is an early warning of a bad prompt change
-  or model update; track it in `observability.md`.
+  or model update; track it (`observability.md` if used).
 - **Route refusals to a fallback**, never the parser.
-- **Every class of semantic failure becomes a code grader** in `eval-plan.md`
-  (`agent-evals`).
+- **Every class of semantic failure becomes a code grader** (`agent-evals`; `eval-plan.md`
+  if used).

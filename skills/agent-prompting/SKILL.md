@@ -11,7 +11,7 @@ description: >-
   migration process (agent-production).
 license: MIT
 metadata:
-  version: 0.1.0
+  version: 0.2.0
 ---
 
 # Agent prompting
@@ -21,9 +21,10 @@ and emphasis are not goals.
 
 ## Core rules
 
-1. **No prompt change ships without an eval run** before and after, with the delta in
-   `experiment-log.md`. No eval → build one first (`agent-evals` → "Minimal eval"); ~20
-   real cases is enough while effects are large.
+1. **Evidence before "better".** For a non-trivial change, propose the smallest eval that
+   would show it worked (`agent-evals` → "Minimal eval"; ~20 real cases is enough while
+   effects are large) and run it before and after. If the user declines, or the change is
+   cosmetic, make it and say plainly that it's unevaluated.
 2. **Start minimal on the strongest model.** Add a line only for a failure category seen
    in traces, never for one bad trace.
 3. **Right altitude:** heuristics with reasons, not if/else trees and not platitudes. If a
@@ -90,6 +91,8 @@ and emphasis are not goals.
 
 ## Outputs
 
+Write these to `agent-engineering/` only if the project keeps one (see `agent-engineer` → *Project record (optional)*); otherwise put them in your reply or the PR description.
+
 - Prompt files in the user's repo (e.g. `prompts/<agent>/system.md`), versioned and loaded
   by name.
 - Prompt name and version on every LLM span (`gen_ai.prompt.name` / `.version`, or
@@ -102,7 +105,7 @@ and emphasis are not goals.
   steering, reasoning, prompts as code. Read when drafting or restructuring.
 - `references/examples-and-structured-output.md` — choosing examples, structured output,
   schema design, validation and retry. Read when output feeds code or format drifts.
-- `references/model-quirks.md` — per-model behaviour (Claude, GPT-4.1, GPT-5). Read before
+- `references/model-quirks.md` — per-model behaviour (Claude, GPT-5). Read before
   targeting or migrating to a model.
 - `references/prompt-review-checklist.md` — pass/fail review checklist and report format.
   Read when asked to review or improve a prompt.

@@ -11,7 +11,7 @@ description: >-
   or tool redesign (agent-tools).
 license: MIT
 metadata:
-  version: 0.1.0
+  version: 0.2.0
 ---
 
 # Agent accuracy
@@ -21,8 +21,9 @@ the cheapest change that works.
 
 ## Core rules
 
-1. **No eval, no fix.** Baseline before any change. No eval set → 20–50 cases from real
-   failures via `agent-evals` (*Minimal eval*).
+1. **Measure before and after.** A fix needs a baseline. No eval set → propose 20–50
+   cases from real failures via `agent-evals` (*Minimal eval*); if the user declines, say
+   the fix is unverified.
 2. **Reproduce first:** k ≈ 3 / expected failure rate runs (≈ 5 at 50%, ≈ 30 at 10%;
    20–30 if unknown). Five clean runs only rule out failure rates above ~45%.
 3. **Fix the first upstream failure.** Later errors cascade from it.
@@ -98,6 +99,8 @@ when what's left needs a product decision. Tell the user which.
 
 ## Outputs
 
+Write these to `agent-engineering/` only if the project keeps one (see `agent-engineer` → *Project record (optional)*); otherwise put them in your reply or the PR description.
+
 - One `experiment-log.md` entry per experiment: change, hypothesis, eval and dataset
   version, before → after with CI, regressions, cost/latency, decision.
 - `failure-taxonomy.md`: updated counts and `Component` column.
@@ -110,5 +113,6 @@ when what's left needs a product decision. Tell the user which.
   fix.
 - `references/intervention-ladder.md` — each rung's when/how/pitfalls, when popular fixes
   are wrong, reliability fixes. Read when choosing a fix.
-- `references/experiment-discipline.md` — pinning, noise floor, run counts, keep/revert,
-  overfitting, log entry, stopping. Read before comparing versions.
+- `references/experiment-discipline.md` — hypothesis, run counts, keep/revert,
+  overfitting, log entry, stopping. Comparison mechanics: `agent-evals` →
+  `references/quick-paths.md`.

@@ -5,15 +5,20 @@
 Use when an eval set exists and the question is "is B better than A?" (prompt edit, model
 upgrade, new tool).
 
-1. **Same everything except the change:** dataset version, split (dev while iterating),
-   judge prompt and model, fixtures, pinned settings.
+1. **Same everything except the change.** Pin model ID (dated snapshot, not alias),
+   sampling params (temperature, effort/thinking, max tokens), prompt, tool, dataset, judge
+   prompt and model versions, fixtures, git SHA. Freeze the environment: mock or record live
+   tools, freeze the retrieval index, fix "now" in time-dependent cases; judge at temperature
+   0 with cached verdicts. Compare on **dev**
+   while iterating; test once at the end.
 2. **Know the noise floor.** Run the baseline ≥ 3 times; the spread is the smallest change
    you can claim. CI half-widths: `ci-and-online-evals.md`.
 3. **k = 3–5 trials per case** for stochastic agents, averaged per case before
    differencing. Repeats remove within-case noise; only more cases remove between-case
    noise.
 4. **Paired difference with a CI** on the same cases, not two independent rates. On 100
-   cases near 80%, differences under ~8 points are noise.
+   cases near 80%, differences under ~8 points are noise; ~20 cases suffice only for large
+   effects (30% → 80%).
 5. **Clustered cases** (same document, conversation, template) can make the true SE > 3×
    the naive one; analyse per cluster.
 6. **Per failure mode and tag:** a +3 overall can hide −10 on one mode. List every
@@ -73,5 +78,6 @@ will gate releases.
 - [ ] **Cost to run** per run and per month; a suite too expensive to run gets skipped.
 - [ ] **Read 10–20 failing transcripts** and confirm verdicts with the domain expert.
 
-Record keep / fix / drop per eval in `eval-plan.md`. Gaps in mapping or judge validation
+Record keep / fix / drop per eval (in `eval-plan.md` if the project uses
+`agent-engineering/`). Gaps in mapping or judge validation
 send those evals back through the full workflow.

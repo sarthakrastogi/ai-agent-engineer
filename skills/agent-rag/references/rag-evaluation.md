@@ -20,7 +20,8 @@
 - Report per query cluster, not only overall; a 90% average hides a 40% cluster.
 - Retrieval evals make no LLM calls: run them on every chunking, embedding, filter or
   ranking change.
-- ANN recall is its own layer: compare with exact search (`vector-indexes.md`).
+- ANN recall is its own layer: compare with exact search (`retrieval-and-ranking.md` →
+  Vector index).
 
 ### Constraint satisfaction (filtered search)
 
@@ -103,10 +104,10 @@ Use recall@k for multi-chunk questions; hit@k hides partially retrieved answers.
 - **Cadence:** retrieval metrics on every change; context relevance, faithfulness, answer
   relevance per release; coverage and answerability monthly.
 - **Report quality with cost:** every change logs recall delta, added p95 latency and cost
-  per query in `experiment-log.md`.
+  per query (`experiment-log.md` if used).
 - **A/B variants on the same queries;** have a human review the queries where they disagree.
 
-## Where it lives
+## Where it lives (if the project uses `agent-engineering/`)
 
 - Retrieval and generation rows in `eval-plan.md` (grader, threshold, dataset).
 - Labelled set in `datasets/retrieval-<name>.jsonl`.

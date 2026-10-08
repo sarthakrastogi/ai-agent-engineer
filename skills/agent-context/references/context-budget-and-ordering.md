@@ -7,8 +7,8 @@ task-relevant tokens at the end, where attention is strong.
 
 | # | Block | Stability | Notes |
 |---|---|---|---|
-| 1 | Tool definitions | Fixed for the run | Changing them invalidates the whole cache; mask instead (`prompt-caching.md`). |
-| 2 | System prompt | Fixed per version | No timestamps, user names or request IDs. |
+| 1 | Tool definitions | Fixed for the run | Mask, don't edit; cache rules in `prompt-caching.md`. |
+| 2 | System prompt | Fixed per version | No per-request values. |
 | 3 | Stable reference context | Fixed per session | Glossary, schema summaries, user profile. Keep small. |
 | 4 | Retrieved memories / long docs | Per session or task | Before the question. |
 | 5 | History: messages, tool calls, results | Append-only | Cleared or compacted as it grows (`memory-and-compaction.md`). |
@@ -17,7 +17,7 @@ task-relevant tokens at the end, where attention is strong.
 
 - **Most relevant chunks at the edges**; the middle of the window is used worst.
 - **Own the serialisation.** Dense typed event records ("tool X → status, 3 key fields,
-  pointer") beat raw message dumps. Serialise deterministically: sorted keys, fixed formats.
+  pointer") beat raw message dumps, serialised deterministically (`prompt-caching.md`).
 - **Mid-run guidance is a new message**, never an edit to the system prompt or earlier
   turns.
 

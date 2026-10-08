@@ -11,7 +11,7 @@ description: >-
   (agent-observability).
 license: MIT
 metadata:
-  version: 0.1.0
+  version: 0.2.0
 ---
 
 # Agent production
@@ -76,6 +76,8 @@ Beyond breaking the rules above:
 
 ## Outputs
 
+Write these to `agent-engineering/` only if the project keeps one (see `agent-engineer` → *Project record (optional)*); otherwise put them in your reply or the PR description.
+
 Add to `agent-engineering/design.md`:
 
 ```markdown
@@ -90,7 +92,8 @@ Add to `agent-engineering/design.md`:
 - Fallbacks: per dependency, fail open / degrade / fail closed
 ```
 
-Log each optimisation, rollout and migration in `experiment-log.md`.
+Log each optimisation, rollout and migration with its measured delta. Before launch, walk
+`assets/launch-checklist.md`.
 
 ## References
 

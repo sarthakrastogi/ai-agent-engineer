@@ -80,8 +80,8 @@ Return JSON: {"critique": "<reasoning that cites the input>", "verdict": "PASS|F
 
 | Bias | Mitigation |
 |---|---|
-| Position (order flips pairwise verdicts in 50–70% of cases) | Run both orders; win only if consistent, else tie |
-| Verbosity (longer preferred > 90%) | Criterion-specific definitions; length-matched borderline examples |
+| Position (order can flip a large share of pairwise verdicts) | Run both orders; win only if consistent, else tie |
+| Verbosity (longer answers usually preferred) | Criterion-specific definitions; length-matched borderline examples |
 | Self-preference | Different family for pairwise; validate |
 | Expertise gap (judges agree with non-experts more than experts) | Validate against domain-expert labels |
 

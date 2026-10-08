@@ -21,6 +21,29 @@
   drift; otherwise query both and fuse in code.
 - With a reranker downstream, tune the first stage for recall, not order: over-fetch.
 
+## Vector index (ANN)
+
+- ANN is one more recall loss, below the embedder. **On labelled queries, compare the
+  index's top-k with exact search** over the same vectors; if exact finds the gold chunk and
+  the index doesn't, tune the index before touching the embedder or chunking. Re-check after
+  changing index parameters.
+- What counts is **recall at the candidate k**: a reranker can't recover a chunk the index
+  never returned. Keep `ef_search` ≥ candidate k.
+- Small corpora don't need ANN: exact search or a vector column in your existing database.
+- Pick the recall you need, then the cheapest setting that reaches it (95% recall can be
+  ~10× faster than 99%). Sweep `ef_search` against p95 latency; never keep defaults
+  unmeasured. Frequent re-indexing can make HNSW build time dominate; consider IVF.
+- **Filtered search** (tenant, ACL, date) can be 10–100× slower: the search visits many
+  nodes to find a few that pass. Use native pre-filtering, partitions per high-cardinality
+  value (per tenant), or for very selective filters filter in a database and search the
+  survivors exactly. Benchmark at realistic selectivity; ACL filters are mandatory, so their
+  latency is part of the budget.
+- **Not OLTP.** Deletes are tombstones, updates are delete + insert; churn degrades graph
+  connectivity. Batch updates, re-index periodically, track recall after heavy churn.
+- Fan-out to all shards means the slowest sets p99; routed shards are faster but can miss
+  neighbours. Warm HNSW into memory after deploys and restarts.
+- Use PQ or fewer dimensions only after measuring the recall cost.
+
 ## Reranking
 
 - **Two stages:** retrieve broadly (top ~25–150), rerank with a cross-encoder to the final

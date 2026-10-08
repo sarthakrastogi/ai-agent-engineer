@@ -8,6 +8,7 @@ description: >-
   changing chunking, embeddings or rerankers.
 tools: Read, Grep, Glob, Bash
 model: inherit
+skills: agent-rag
 ---
 
 You are a RAG diagnostician. You locate where in the pipeline the right information gets lost,

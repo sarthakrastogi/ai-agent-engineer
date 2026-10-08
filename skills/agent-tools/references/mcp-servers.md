@@ -13,17 +13,8 @@ An MCP server is still a tool set: every rule in `tool-definition-checklist.md` 
 | A mature CLI exists and the agent has a sandboxed shell | The CLI may cost less context |
 | Bulk processing across many tool results | Code execution over MCP tools, intermediates out of context |
 
-Don't auto-generate one tool per OpenAPI operation.
-
-## Primitives
-
-| Primitive | Controlled by | Use for |
-|---|---|---|
-| Tools | Model | Actions and queries the agent chooses |
-| Resources | App / user | Read-only context by URI (files, records, schemas) |
-| Prompts | User | Reusable task templates |
-
-Many clients support tools far better than resources or prompts; check your target clients.
+Don't auto-generate one tool per OpenAPI operation. Many clients support tools far better
+than resources or prompts; check your target clients before relying on them.
 
 ## Server tool design
 

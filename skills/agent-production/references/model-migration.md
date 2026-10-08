@@ -45,8 +45,8 @@ eval, shadow and canary take time.
 8. **Re-baseline cost and latency**; update budgets and alert thresholds.
 9. **Shadow, then canary** (versioning-and-rollouts.md). Watch online judges, escalation,
    refusal rate, cost per task.
-10. **Log** in `experiment-log.md` (eval deltas, effort, prompt diffs, cost/latency,
-    decision); update model and retirement date in `design.md`.
+10. **Log** eval deltas, effort, prompt diffs, cost/latency and decision; update model and
+    retirement date (`experiment-log.md` and `design.md` if used).
 
 ## Ship rule
 

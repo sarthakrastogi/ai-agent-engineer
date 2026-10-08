@@ -11,7 +11,7 @@ description: >-
   traces (agent-observability).
 license: MIT
 metadata:
-  version: 0.1.0
+  version: 0.2.0
 ---
 
 # Agent evals
@@ -99,6 +99,8 @@ judges (RAGAS scores are unvalidated judges). Depth: `agent-rag`.
 - Scoring empty trace-level I/O when the content sits on a child span.
 
 ## Outputs
+
+Write these to `agent-engineering/` only if the project keeps one (see `agent-engineer` → *Project record (optional)*); otherwise put them in your reply or the PR description.
 
 - `failure-taxonomy.md`; `eval-plan.md` (judge table with TPR/TNR, gates, budget).
 - `datasets/*.jsonl` with provenance, split and version.

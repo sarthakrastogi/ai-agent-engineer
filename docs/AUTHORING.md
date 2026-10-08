@@ -61,9 +61,11 @@ against current provider docs" line.
 
 ## Subagents (`agents/*.md`)
 
-They use Claude-style frontmatter: `name`, `description`, `tools`, `model: inherit`.
-`scripts/build_adapters.py` generates the other harnesses' formats. Every subagent has
-two required sections:
+They use Claude-style frontmatter: `name`, `description`, `tools`, `model: inherit`, and
+`skills:` naming the skill(s) whose method the subagent follows. Claude Code preloads those
+skills; `scripts/build_adapters.py` tells other harnesses to read them first. Point at the
+skill's references instead of copying their procedure into the subagent body. Every
+subagent has two required sections:
 
 - `## Brief must contain`: what the main agent passes in, since subagents can't ask the
   user.

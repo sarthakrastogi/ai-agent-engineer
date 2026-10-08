@@ -1,6 +1,6 @@
 # Conversation and handoff
 
-Write these choices into the Scope and HITL sections of `design.md`.
+Record these choices (Scope and HITL sections of `design.md` if used).
 
 ## Clarify or proceed
 

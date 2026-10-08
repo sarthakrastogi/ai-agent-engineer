@@ -24,10 +24,18 @@ class RouterPointers(unittest.TestCase):
             with self.subTest(skill=skill, section=section):
                 self.assertIn(section.strip().lower(), headings(skill))
 
-    def test_router_asset_pointers_exist(self):
-        for asset in set(re.findall(r"`assets/([\w.-]+)`", ROUTER.read_text())):
-            with self.subTest(asset=asset):
-                self.assertTrue((ROUTER.parent / "assets" / asset).is_file())
+    def test_asset_pointers_exist(self):
+        """`assets/x` resolves in the named skill (`agent-y` → `assets/x`) or the file's own."""
+        skills_dir = ROOT / "skills"
+        files = list(skills_dir.rglob("*.md")) + list((ROOT / "agents").glob("*.md"))
+        for md in files:
+            own = md.relative_to(skills_dir).parts[0] if skills_dir in md.parents else None
+            for m in re.finditer(r"(?:`(agent-[a-z-]+)`(?:\s*(?:→|->)\s*|\s+skill's\s+))?"
+                                 r"`assets/([\w.-]+)`", md.read_text()):
+                skill = m.group(1) or own
+                with self.subTest(file=str(md.relative_to(ROOT)), asset=m.group(2)):
+                    self.assertIsNotNone(skill, "name the skill that owns the asset")
+                    self.assertTrue((skills_dir / skill / "assets" / m.group(2)).is_file())
 
     def test_every_skill_and_agent_mentioned_exists(self):
         skills = {p.name for p in (ROOT / "skills").iterdir() if p.is_dir()}

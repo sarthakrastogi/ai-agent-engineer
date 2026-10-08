@@ -12,7 +12,8 @@ Over-represent:
 - long multi-turn sessions, rare intents and segments.
 
 Mix: cluster by intent or embedding into 6–10 groups; take 60–70% as cluster
-representatives, 30–40% at random. Record the sampling method in `failure-taxonomy.md`.
+representatives, 30–40% at random. Record the sampling method (in `failure-taxonomy.md` if
+used).
 
 No traffic yet: run the agent on 20–50 realistic hand-written or synthetic inputs and
 analyse those; redo on real traffic as soon as it exists.
@@ -77,7 +78,7 @@ From the highest-rate mode down:
    judge for subjective, runtime guard for compliance (`agent-guardrails`).
 3. **Needs a product decision** (policy is silent) → flag to the user.
 
-Record it in the `Tracked by eval?` column of `failure-taxonomy.md`.
+Record it (`Tracked by eval?` column of `failure-taxonomy.md` if used).
 
 ## Practice
 

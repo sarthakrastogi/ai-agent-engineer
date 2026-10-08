@@ -99,8 +99,9 @@ one task at a time from a visible queue the user can pause, reorder and edit.
 
 ## Fallbacks and degraded modes
 
-- **Fallback per dependency is a business decision.** Ask the user, per dependency: fail
-  open, degrade, or fail closed; write the table into `design.md`. The LLM provider down is
+- **Fallback per dependency is a business decision.** Propose fail open, degrade or fail
+  closed per dependency, state it and let the user correct it; write the table into
+  `design.md` if used. The LLM provider down is
   always a clean, explicit failure. Never fail open in front of high-risk tools. Put the
   fallback in calling code, not inside the breaker.
 - Default when retrieval or a tool is down: answer with a stated limitation or hand off, not

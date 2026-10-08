@@ -75,9 +75,10 @@ problem can lower accuracy.
 
 - **When:** cases pass 0/k with oracle context, clean instructions and good tools, and a
   stronger-model probe passes.
-- **How:** sweep effort/thinking before switching models. Then compare models paired on the
-  full suite with cost and latency, at matched token budgets. Re-tune the prompt for the
-  new model. Migration and rollout: `agent-production`.
+- **How:** effort sweep, then step-down/up order per `agent-design` →
+  `references/model-and-framework-choice.md`. Compare models paired on the full suite with
+  cost and latency, at matched token budgets. Re-tune the prompt for the new model.
+  Migration and rollout: `agent-production`.
 - **Pitfalls:** a bigger model for a reliability or spec problem; ignoring the agreed cost
   and latency.
 

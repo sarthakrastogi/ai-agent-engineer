@@ -21,7 +21,10 @@ problem can lower accuracy.
   to debug.
 - Fine-tuning doesn't fix missing knowledge; it can make domain hallucinations more confident.
 
-## 2. Ask the user
+## 2. Establish the facts
+
+Find what you can from the corpus and code; for the rest assume a sensible default, state it
+and let the user correct it.
 
 - Corpus size (tokens or pages) and change rate.
 - Query types: single-fact, comparison, "latest X", summary, multi-hop, code navigation.
@@ -59,6 +62,6 @@ problem can lower accuracy.
 
 ## 4. Record it
 
-Write the choice and rejected alternatives in `design.md` under "Knowledge sources /
-retrieval" with corpus size, update cadence, query types and budget. Revisit when the corpus
-outgrows the prompt or the query mix changes.
+Write the choice and rejected alternatives (in `design.md` if used) under "Knowledge sources
+/ retrieval" with corpus size, update cadence, query types and budget. Revisit when the
+corpus outgrows the prompt or the query mix changes.

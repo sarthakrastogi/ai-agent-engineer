@@ -8,7 +8,11 @@ means no `agent-*` skill should load (negative case — catches over-triggering)
 Pass condition: at least one expected skill is loaded on the first turn; for negative
 cases, none is.
 
-Run against Claude Code (uses your account; ~30 short sessions):
+Each case runs in a fresh copy of `fixture/`, a small LangGraph support agent, so prompts
+like "rename a variable in agent.py" have a real project to land in. The fixture is
+committed; a case can add `"edits": {"path": "content"}` to leave uncommitted changes.
+
+Run against Claude Code (uses your account; ~35 short sessions, 4 at a time):
 
 ```bash
 python3 evals/run_routing.py --harness claude            # all cases

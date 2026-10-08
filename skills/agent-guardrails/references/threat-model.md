@@ -24,21 +24,6 @@ reach?". Tool calls inherit every permission the agent holds.
 | Other agents' outputs | Lowest trust of anything that agent read |
 | Repo content (README, AGENTS.md, configs) | Untrusted for third-party repos; coding agents load them automatically |
 
-## OWASP LLM Top 10, agent view
-
-| ID | Risk | In an agent | Primary control |
-|---|---|---|---|
-| LLM01 | Prompt injection | Email body makes the agent forward the inbox | Architecture patterns; authz in code; HITL on sinks |
-| LLM02 | Sensitive info disclosure | Another tenant's records or a secret in output | Scope in the data layer; no secrets in context; output scan |
-| LLM03 | Supply chain | Malicious MCP server, skill, model, package | Pin, review, provenance, sandbox |
-| LLM04 | Data/model poisoning | Edited wiki page RAG indexes; poisoned memory | Control corpus writers; provenance on ingest |
-| LLM05 | Improper output handling | Model text in SQL, shell, HTML, URL | Parameterise, encode, validate |
-| LLM06 | Excessive agency | Holds delete/admin/send it doesn't need | Least functionality, permissions, autonomy; HITL |
-| LLM07 | System prompt leakage | Prompt reveals rules, keys, authz logic | Assume the prompt is public |
-| LLM08 | Vector/embedding weaknesses | Cross-tenant retrieval from a shared index | Per-tenant filters enforced by the store |
-| LLM09 | Misinformation | Acts on a hallucinated fact | Grounding and verification (`agent-rag`, `agent-evals`) |
-| LLM10 | Unbounded consumption | Injected loop, token bomb, denial of wallet | Turn, token, spend caps (`agent-production`) |
-
 ## Exfiltration channels
 
 Each is an exfil leg:
@@ -80,11 +65,22 @@ Separately check **untrusted content + any high-risk tool**:
 - Persistence: writes to memory, instruction files or prompts future runs load.
 - Propagation: injected text written where other agents or users read it.
 - Manipulation: biased summaries the user acts on.
-- Denial of wallet: induced loops or huge tool outputs.
+- Denial of wallet: induced loops or huge tool outputs (LLM10: turn, token, spend caps).
+
+Also check, by OWASP LLM ID (use the ID in threat notes):
+
+- **LLM02** another tenant's records or a secret in output → scope in the data layer, no
+  secrets in context. **LLM08** cross-tenant retrieval → per-tenant filters enforced by the
+  store.
+- **LLM03** malicious MCP server, skill, model or package → pin, review, sandbox.
+  **LLM04** edited wiki page or memory poisons RAG → control corpus writers, provenance.
+- **LLM05** model text reaching SQL, shell, HTML or URLs → parameterise, encode, validate.
+- **LLM07** assume the system prompt is public: no keys or authz logic in it.
 
 ## Writing threat notes
 
-One `design.md` risk row per **source → sink path**, not per category:
+One risk row (in `design.md` if the project uses `agent-engineering/`) per **source → sink
+path**, not per category:
 
 - **Risk:** OWASP ID + path, e.g. `LLM01: ticket body → close_ticket`.
 - **Likelihood:** who can write to the source — internet = high; authenticated employees =

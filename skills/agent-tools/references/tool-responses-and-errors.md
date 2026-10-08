@@ -54,6 +54,13 @@ Error: no customer with email "jon@acme.co". Did you mean "john@acme.co"? Search
 Error: refund amount 1,200.00 exceeds the order total 120.00 for order ord-5521.
 ```
 
+Instead of `ValueError: invalid literal for Decimal: '£45'`, return:
+
+```text
+Error: amount must be a number in the order's currency without symbols (e.g. 45.00); got "£45".
+Order ord-5521 is in GBP; maximum refundable is 120.00.
+```
+
 Return errors as a tool result flagged `is_error: true` so the loop continues and the model
 sees it; don't raise an exception that kills the run.
 
@@ -99,4 +106,4 @@ sees it; don't raise an exception that kills the run.
 | Goal failure (tools worked, task not done) | Task design, missing tool |
 | Inefficiency (too many calls) | Response shape, merge tools |
 
-Track counts in `failure-taxonomy.md`.
+Track counts per class (`failure-taxonomy.md` if used).

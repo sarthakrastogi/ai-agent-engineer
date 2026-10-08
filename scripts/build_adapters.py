@@ -16,7 +16,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from validate import split_frontmatter  # noqa: E402
+from validate import agent_skills, split_frontmatter  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 HEADER = "Generated from agents/{name}.md by scripts/build_adapters.py — do not edit."
@@ -34,8 +34,15 @@ def load_agents() -> list[dict]:
     for md in sorted((ROOT / "agents").glob("*.md")):
         fm, body = split_frontmatter(md.read_text())
         tools = [t.strip() for t in fm.get("tools", "").split(",") if t.strip()]
+        body = body.strip() + "\n"
+        skills = agent_skills(fm)
+        if skills:  # Claude Code preloads `skills:`; other harnesses are told to read them
+            names = ", ".join(f"`{s}`" for s in skills)
+            body = (f"Before you start, read the {names} skill{'s' if len(skills) > 1 else ''} "
+                    "(its SKILL.md, then the references it points to as needed). Your method "
+                    "comes from there.\n\n" + body)
         agents.append({"name": fm["name"], "description": fm["description"],
-                       "tools": tools, "body": body.strip() + "\n"})
+                       "tools": tools, "body": body})
     return agents
 
 

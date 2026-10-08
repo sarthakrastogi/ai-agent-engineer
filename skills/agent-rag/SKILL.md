@@ -10,18 +10,13 @@ description: >-
   (agent-context), or judge design beyond retrieval metrics (agent-evals).
 license: MIT
 metadata:
-  version: 0.1.0
+  version: 0.2.0
 ---
 
 # Agent RAG
 
 Retrieval is a search problem: measure it with retrieval metrics on a labelled set,
 separately from the answer.
-
-Not for: history, memory, compaction → `agent-context` (agentic search spans both: search
-quality is here, what its results do to the window is there). Judges and CI gates →
-`agent-evals`. Search-tool schemas → `agent-tools`. Injection via retrieved text →
-`agent-guardrails`.
 
 ## Core rules
 
@@ -73,7 +68,7 @@ quality is here, what its results do to the window is there). Judges and CI gate
 | Right chunk in neither | Chunk headers / contextual retrieval, then query rewriting |
 | Retrieved but cut off or filtered out | Reranker, tune k, fix the filter |
 | "Latest", dated, typed or hard-constraint queries ("under $200", "not X") | Extract filters; search only within them |
-| Exact search finds it, the ANN index doesn't | Tune the index (`references/vector-indexes.md`) |
+| Exact search finds it, the ANN index doesn't | Tune the index (`references/retrieval-and-ranking.md` → Vector index) |
 | Multi-hop across entities after hybrid + rerank | Agentic search, then graph retrieval, measured |
 | Right chunk in context, answer wrong | Generation: quote-first, allow "I don't know", ordering |
 | Chat follow-ups retrieve badly | Condense history into a standalone query |
@@ -89,6 +84,8 @@ quality is here, what its results do to the window is there). Judges and CI gate
 - Synthetic-only eval sets; labels keyed to chunk IDs that break on re-chunk.
 
 ## Outputs
+
+Write these to `agent-engineering/` only if the project keeps one (see `agent-engineer` → *Project record (optional)*); otherwise put them in your reply or the PR description.
 
 - Retrieval decision and rejected options in `design.md`.
 - `datasets/retrieval-<name>.jsonl` with provenance; retrieval and generation rows in
@@ -108,5 +105,3 @@ quality is here, what its results do to the window is there). Judges and CI gate
   set, recall@k snippet. Read before tuning and when writing `eval-plan.md`.
 - `references/diagnosing-rag.md` — logging, first-failing-stage walk, fix order, query
   clusters, flywheel. Read when answers are wrong or quality is unknown.
-- `references/vector-indexes.md` — ANN recall, HNSW/IVF/PQ, filtered search, updates,
-  memory. Read when choosing or tuning a vector store.

@@ -53,7 +53,7 @@ for size in [200, 400, 800]:
   for overlap in [0, 0.1 * size]:
     index = build_index(corpus, splitter=recursive(size, overlap, respect=headings))
     report(size, overlap, recall_at_k(index, labelled_set, k=K_CANDIDATE), index_tokens)
-pick the smallest config within noise of the best recall; log it in experiment-log.md
+pick the smallest config within noise of the best recall; log it
 ```
 
 ### Route by document type
@@ -80,10 +80,9 @@ When headers leave a recall gap: a small model reads the whole document plus the
 writes 50–100 tokens situating the chunk; prepend that **before both embedding and BM25
 indexing**.
 
-- Expected effect on retrieval failures (1 − recall@20): contextual embeddings −35%,
-  + contextual BM25 −49%, + reranking −67%.
-- Cost: about $1 per million document tokens with prompt caching on the document; one-off
-  per document version.
+- Expected effect on retrieval failures (1 − recall@20): often cut by a third or more,
+  more with contextual BM25 and reranking on top. Measure on your labelled queries.
+- Cost: cheap with prompt caching on the document; one-off per document version.
 - Prompt shape: "Give a short succinct context to situate this chunk within the overall
   document for the purposes of improving search retrieval." Adapt to the domain and version
   it like any prompt.

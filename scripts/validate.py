@@ -147,6 +147,14 @@ def check_agent(md: Path, skill_names: set[str]) -> None:
         err(f"{rel(md)}: subagent name collides with a skill")
     if "## Output contract" not in body:
         err(f"{rel(md)}: subagents must define an '## Output contract' section")
+    for skill in agent_skills(fm):
+        if skill not in skill_names:
+            err(f"{rel(md)}: preloads unknown skill '{skill}'")
+
+
+def agent_skills(fm: dict) -> list[str]:
+    """The `skills:` a subagent preloads (comma-separated, bare names)."""
+    return [s.strip() for s in str(fm.get("skills", "")).split(",") if s.strip()]
 
 
 def check_json(path: Path) -> None:

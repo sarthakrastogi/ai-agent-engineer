@@ -6,11 +6,11 @@ description: >-
   sandboxing, human approvals, input/output guards, MCP trust, red-teaming. Use when an
   agent reads untrusted content (web, email, docs, tool results) or gets write, send, pay,
   delete or code-execution tools; on prompt injection, jailbreaks, permissions, approvals,
-  PII leaks or third-party MCP servers; and before any agent with tools ships. Tool schemas
+  PII leaks or third-party MCP servers; and before shipping an agent that has either. Tool schemas
   belong to agent-tools; PII in traces to agent-observability.
 license: MIT
 metadata:
-  version: 0.1.0
+  version: 0.2.0
 ---
 
 # Agent guardrails
@@ -86,6 +86,8 @@ A chat-only bot with no tools or private data needs only `references/input-outpu
 
 ## Outputs
 
+Write these to `agent-engineering/` only if the project keeps one (see `agent-engineer` → *Project record (optional)*); otherwise put them in your reply or the PR description.
+
 **Risks & guardrails** in `agent-engineering/design.md`:
 
 ```markdown
@@ -104,7 +106,7 @@ defence with ASR and utility deltas.
 
 ## References
 
-- `references/threat-model.md` — entry points, OWASP agent view, exfil channels, trifecta
+- `references/threat-model.md` — entry points, OWASP IDs, exfil channels, trifecta
   worksheet, threat notes. Read at step 2.
 - `references/injection-resistant-patterns.md` — six patterns, fit and cost. Read when the
   trifecta check fails.

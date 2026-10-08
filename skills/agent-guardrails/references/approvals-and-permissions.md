@@ -15,7 +15,8 @@ This is the pack's canonical tier table; `agent-design` and `agent-tools` point 
 **Money movement** is Medium only with all of: per-transaction and per-user-per-period caps
 in code, an idempotency key, a reversal path, an audit log, and alerts on anomalies (spikes
 per user, amounts clustering just under the cap). Over the cap or irreversible (wires,
-crypto, gift cards): High. Cap values are a business decision — ask the user.
+crypto, gift cards): High. Cap values are a business decision: propose them
+and let the user set them.
 
 Then per tool:
 

@@ -101,5 +101,5 @@ Depth: `agent-rag` → `diagnosing-rag.md`; delegate to `rag-diagnostician` if a
 A grader fix is a legitimate result; log it.
 
 With many failing traces, delegate to `trace-analyst` (modes, counts, component per mode).
-Otherwise run this on 30–50 failing traces and fill the `Component` column of
-`failure-taxonomy.md`.
+Otherwise run this on 30–50 failing traces and record the component per mode (`Component`
+column of `failure-taxonomy.md` if used).

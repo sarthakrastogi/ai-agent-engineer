@@ -54,7 +54,7 @@ you can label 100–200 cases. Leave reasoning and writing to the LLM.
    thresholds; pin the version.
 4. Automate only where accurate: high confidence on reversible actions; rest to a person
    or stronger model.
-5. Log in `experiment-log.md`; keep monitoring band accuracy online.
+5. Log the result (`experiment-log.md` if used); keep monitoring band accuracy online.
 
 ## Keep out of a classifier
 

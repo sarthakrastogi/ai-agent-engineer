@@ -66,7 +66,7 @@ Starting points; tune to your baseline.
 
 Signals, weakest to strongest:
 
-1. Explicit thumbs/stars — sparse (≈0.1% of messages).
+1. Explicit thumbs/stars — sparse (often well under 1% of messages).
 2. Behavioural: regenerate, copy, stop, abandon.
 3. Conversational: the user rephrases or corrects.
 4. **Outcome:** draft edited before sending, ticket closed, PR merged, answer accepted.

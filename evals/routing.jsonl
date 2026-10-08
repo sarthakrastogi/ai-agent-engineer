@@ -25,6 +25,10 @@
 {"id": "n02", "prompt": "Fix the CSS so the header is centred.", "expect": []}
 {"id": "n03", "prompt": "Add a Postgres index for the users.email column.", "expect": []}
 {"id": "r24", "prompt": "We launch our support agent next week. What do we still need to check?", "expect": ["agent-engineer", "agent-production"]}
-{"id": "r25", "prompt": "I changed prompts/triage.md — is the new version better? We have an evals/ folder.", "expect": ["agent-evals"]}
+{"id": "r25", "prompt": "I changed prompts/triage.md — is the new version better? We have an evals/ folder.", "expect": ["agent-evals"], "edits": {"prompts/triage.md": "You are a support agent for an online store. Classify the ticket as billing, delivery or other. Always look up the order before replying, even if no order ID is mentioned, and draft a short, warm reply that apologises first.\n"}}
 {"id": "r26", "prompt": "We inherited an eval suite from another team. Can we trust its numbers?", "expect": ["agent-evals"]}
 {"id": "r27", "prompt": "Should we split our agent into a planner and several specialist agents?", "expect": ["agent-design"]}
+{"id": "n04", "prompt": "In agent.py, rename the variable resp to response everywhere.", "expect": []}
+{"id": "n05", "prompt": "Bump langchain to the latest patch release in requirements.txt.", "expect": []}
+{"id": "n06", "prompt": "Add a --verbose flag to the CLI that runs our support agent.", "expect": []}
+{"id": "n07", "prompt": "The unit test for parse_date in tools/dates.py is failing with a timezone error. Fix it.", "expect": []}

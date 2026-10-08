@@ -10,7 +10,7 @@ description: >-
   and cost/latency fixes (agent-production), or stopping PII leaks (agent-guardrails).
 license: MIT
 metadata:
-  version: 0.1.0
+  version: 0.2.0
 ---
 
 # Agent observability
@@ -52,7 +52,8 @@ Just need to see what it does now, in dev? *Debug-grade tracing* in
 7. **Verify:** smoke-check one trace, add the span-tree test, run fleet and sabotage checks
    (`references/instrumentation-health.md`).
 8. **Metrics, alerts, feedback, eval links** (`references/metrics-dashboards-alerts.md`).
-9. **Write `observability.md`** from the router's `assets/observability.md`.
+9. **Record the schema** from `assets/observability.md` (in `agent-engineering/` if the
+   project keeps one).
 10. **Next:** `agent-evals` error analysis on 30–50 traces (delegate to `trace-analyst`);
     `agent-production` for SLOs and paging.
 
@@ -86,6 +87,8 @@ Just need to see what it does now, in dev? *Debug-grade tracing* in
 - "Spans show up" treated as done.
 
 ## Outputs
+
+Write these to `agent-engineering/` only if the project keeps one (see `agent-engineer` → *Project record (optional)*); otherwise put them in your reply or the PR description.
 
 - Tracing setup, manual spans and a span-tree test in the user's code.
 - Collector config (export, redaction, sampling) if used.

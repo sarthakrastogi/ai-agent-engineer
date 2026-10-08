@@ -93,7 +93,8 @@ Treat model output as user input arriving at the next system:
 - **Keep PII out of the model where possible:** process in code and tokenise so only
   placeholders pass through; the executor substitutes real values at the sink.
 - **When the task needs the value** (phone number + OTP for a plan change), tokenise or
-  pass it through, but still scrub logs and traces. Ask the user which fields the task needs.
+  pass it through, but still scrub logs and traces. Infer which fields the task needs; state
+  it.
 - Redact before logging/tracing (`agent-observability` →
   `references/content-capture-pii-sampling.md`).
 - Ask about residency, provider data-retention settings, and retention for traces and

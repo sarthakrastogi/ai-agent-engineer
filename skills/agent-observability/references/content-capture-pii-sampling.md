@@ -1,8 +1,10 @@
 # Content capture, PII and sampling
 
-## Decide with the user first
+## Decide first
 
-Ask, and record under "PII handling" in `observability.md`:
+Settle these from code, config and policy docs; where unknown, assume the strict default
+(no raw content outside approved reviewers), state it and let the user correct it. Record
+under "PII handling" in `observability.md` if used:
 
 - Which data classes appear in prompts and tool results (PII, health, financial,
   secrets, customer docs)? Residency or retention rules?

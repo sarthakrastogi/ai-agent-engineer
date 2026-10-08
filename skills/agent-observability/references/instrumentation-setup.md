@@ -156,7 +156,6 @@ service:
 - Backends map session/user keys differently; set both the OTel and backend key if needed.
 - **Structured logs carry the trace ID** on every line. Traces show model behaviour; logs
   and attributes show app decisions (cache hit, route, validation result).
-- Return the trace ID to the client with each answer for feedback joins.
 
 ## Flush before exit
 

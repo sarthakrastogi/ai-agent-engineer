@@ -4,7 +4,8 @@ Required before gating on, reporting or acting on any LLM-judge result.
 
 ## Convention
 
-**PASS is the positive class.** State it in `eval-plan.md`; some tools use the opposite.
+**PASS is the positive class.** State it (in `eval-plan.md` if used); some tools use the
+opposite.
 
 - **TPR** = judge PASS when expert PASS = TP / (TP + FN).
 - **TNR** = judge FAIL when expert FAIL = TN / (TN + FP).
@@ -51,7 +52,7 @@ benign users per real attack).
   releases → prioritise TPR. Record the choice.
 - Iterating after seeing test spends it; label fresh test cases before reporting again.
 - Exclude UNKNOWN from TPR/TNR; report the UNKNOWN rate.
-- Record n, TPR, TNR, date, judge prompt version and model in `eval-plan.md`.
+- Record n, TPR, TNR, date, judge prompt version and model (`eval-plan.md` if used).
 
 ## 5. Correct the pass rate (Rogan-Gladen)
 

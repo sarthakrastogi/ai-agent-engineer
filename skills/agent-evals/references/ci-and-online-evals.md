@@ -60,8 +60,8 @@ Gate rules:
 
 Thresholds: start from measured baseline minus noise. Tie to business cost where possible
 (break-even accuracy from cost of a failure vs value of a success). Typical factual-error
-tolerance: ~5–10% internal tools, ~2–3% high-risk. Write thresholds and reasons in
-`eval-plan.md` → `Gates`.
+tolerance: ~5–10% internal tools, ~2–3% high-risk. Write thresholds and reasons down
+(`eval-plan.md` → `Gates` if used).
 
 Practicalities:
 
@@ -81,7 +81,7 @@ e.g. 200 × 3 × ($0.04 + 4 × $0.005) ≈ $36; nightly ≈ $1,100/month
 - Judges only where code can't decide; run only the evals a PR can affect.
 - Batch API (~−50%) for non-blocking nightly runs; retire judges that always pass.
 - Separate API key or workspace for evals so runs can't eat production rate limits.
-- Record the budget in `eval-plan.md`; print the estimate with every run.
+- Record the budget (`eval-plan.md` if used); print the estimate with every run.
 
 ## Online evals
 

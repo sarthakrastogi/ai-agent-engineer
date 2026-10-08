@@ -9,7 +9,7 @@ repo) and each instrumentation's README before relying on them.
   (`gen_ai.system` → `gen_ai.provider.name`; token metrics histogram → counters).
 - Instrumentations emit old conventions unless you set
   `OTEL_SEMCONV_STABILITY_OPT_IN=gen_ai_latest_experimental` (some have their own opt-in).
-- Record the semconv version and opt-in in `observability.md`.
+- Record the semconv version and opt-in (`observability.md` if used).
 
 ## Choosing a schema
 

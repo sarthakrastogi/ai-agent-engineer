@@ -5,7 +5,7 @@
 | Metric | Definition |
 |---|---|
 | Cost per successful task | Token cost of every call in the task (agent, subagents, judges, retries) ÷ tasks that passed |
-| Cache hit rate | Cached input tokens ÷ all input tokens (Anthropic: `cache_read_input_tokens` ÷ (`cache_read` + `cache_creation` + `input_tokens`); OpenAI: `cached_tokens` ÷ prompt tokens) |
+| Cache hit rate | Cached input tokens ÷ all input tokens (per-provider formulas: `agent-context` → `references/prompt-caching.md`) |
 | End-to-end latency | p50/p95/p99 per task (root span), not per call |
 | TTFT | Request to first streamed token the user sees (client-side) |
 | Calls and tokens per task | LLM calls, tool calls, input/output tokens |
@@ -13,7 +13,8 @@
 - Optimise cost per **successful** task: a cheaper model that fails more or takes more turns
   can cost more.
 - Report quality at a cost and latency, never alone.
-- Agents use ~4× the tokens of chat, multi-agent ~15×. Check the task value justifies it.
+- Check the task value justifies agent and multi-agent token multiples (`agent-design` →
+  `references/multi-agent.md` → Cost).
 - Find the dominant term from traces (input vs output, LLM vs tool time) before acting.
 - Model cost per task from its drivers (for a coding agent: files modified, tools used,
   exploration depth), so a task-mix shift explains a cost change before you blame the model.
@@ -33,24 +34,21 @@
 
 ## Prompt caching
 
-Usually the biggest lever: agent loops run ~100:1 input to output. Cache writes cost more
-than base input (Anthropic: 1.25× for 5-min TTL, 2× for 1-h), so a prefix must be reused to
-pay off. Count reads and writes in cost per task; alert when hit rate drops after a deploy.
-Verify against current provider docs. Layout and mechanics: `agent-context` →
-`references/prompt-caching.md`.
+Usually the biggest lever. Writes cost more than base input, so a prefix must be reused to
+pay off: count reads and writes in cost per task. Layout, pricing, breakers and hit-rate
+monitoring: `agent-context` → `references/prompt-caching.md`.
 
 ## Model choice, effort and routing
 
-1. Baseline on the most capable model at full effort (quality ceiling).
-2. Sweep effort on that model; often a better lever than switching models.
-3. Try smaller models per step where evals hold. Hot-path calls with bounded output
-   (query parsing, classification, routing) on every request are candidates for a small
-   fine-tuned or open-weight model, gated on the same evals. Fine-tune for behaviour, never
-   to add knowledge.
-4. Only then multi-model (routing, cascade, orchestrator–workers; shapes in `agent-design`
-   → `references/model-and-framework-choice.md`). Evaluate each route; the router must cost
-   far less than it saves (an LLM router adds 1–5 s), so use code or a small classifier
-   (decision-classifiers.md); the setup must beat the single model's effort/cost curve.
+Order (capable model first, sweep effort, then step down per step, multi-model last):
+`agent-design` → `references/model-and-framework-choice.md`. Cost-specific additions:
+
+- Hot-path calls with bounded output (query parsing, classification, routing) on every
+  request are candidates for a small fine-tuned or open-weight model, gated on the same
+  evals. Fine-tune for behaviour, never to add knowledge.
+- A router must cost far less than it saves (`agent-design` →
+  `references/workflow-patterns.md`); use code or a small classifier
+  (`decision-classifiers.md`).
 
 ## Batching
 

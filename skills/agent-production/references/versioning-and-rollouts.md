@@ -29,7 +29,7 @@ eval_run: <link to the gating eval run>
 ## Pinning models
 
 - Snapshot IDs in production, never floating aliases. Check each provider's naming.
-- Track deprecation and retirement dates in `design.md`; start migration well before.
+- Track deprecation and retirement dates (`design.md` if used); start migration well before.
 - Pin embedder and reranker too; changing the embedder means re-indexing.
 
 ## Pre-release gate
@@ -71,8 +71,8 @@ checkpoint replay).
 
 ## Rollback
 
-- Write triggers before rollout (design.md Production section): regression pass rate,
-  online-judge delta vs control, error and escalation rates, p95, cost per task, high-risk
-  tool anomalies.
+- Write triggers before rollout (`design.md` Production section if used): regression pass
+  rate, online-judge delta vs control, error and escalation rates, p95, cost per task,
+  high-risk tool anomalies.
 - Rollback is a config flip to the previous release unit; test it beforehand.
 - Add the failing traces to the eval set before retrying.

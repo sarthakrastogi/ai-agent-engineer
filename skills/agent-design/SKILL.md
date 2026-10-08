@@ -11,7 +11,7 @@ description: >-
   permissions (agent-guardrails).
 license: MIT
 metadata:
-  version: 0.1.0
+  version: 0.2.0
 ---
 
 # Agent design
@@ -46,8 +46,6 @@ Every moving part in the design must be justified by a requirement it serves.
    data sources in the code. For a failing design, find the lowest stack layer that explains
    it (`references/the-agent-stack.md`) and fix it there.
 2. Run the scoping interview (`references/scoping-interview.md`); get criteria confirmed.
-   If the `agent-architect` subagent is available, delegate steps 3–9 with the confirmed
-   criteria, constraints and whether the user agreed to `agent-engineering/` files.
 3. Decompose the task as a competent human would. Label each step **code**, **LLM**,
    **tool** or **human**.
 4. Draft 2–3 options with the decision rules, always including the simplest plausible one,
@@ -59,8 +57,8 @@ Every moving part in the design must be justified by a requirement it serves.
    `references/approvals-and-permissions.md` and place human checkpoints.
 8. Send tools that write, spend or message outside to `agent-guardrails`. Flag the lethal
    trifecta: private data + untrusted content + a way out.
-9. Write `agent-engineering/design.md` from the `agent-engineer` skill's `assets/design.md`.
-   Ask before creating the directory. Add a decision-log row.
+9. Write the design from `assets/design.md`: into `agent-engineering/design.md` if the
+   project keeps one (offer once for a multi-session project), otherwise in your reply.
 10. Define the first milestone: the smallest end-to-end slice plus the eval that proves it.
 11. Next: `agent-tools`, `agent-rag` if it needs knowledge, `agent-prompting`,
     `agent-observability` with the first working version, then `agent-evals`.
@@ -90,6 +88,8 @@ Every moving part in the design must be justified by a requirement it serves.
 
 ## Outputs
 
+Write these to `agent-engineering/` only if the project keeps one (see `agent-engineer` → *Project record (optional)*); otherwise put them in your reply or the PR description.
+
 - `agent-engineering/design.md`, including rejected alternatives and a decision log.
 - The first milestone and its eval, as open items for `agent-evals`.
 
@@ -99,7 +99,7 @@ Every moving part in the design must be justified by a requirement it serves.
   graph is justified. Read when diagnosing a failure or before adding a layer.
 - `references/scoping-interview.md` — question bank, vague → testable criteria. Read at step
   2 or whenever criteria are vague.
-- `references/workflow-patterns.md` — each pattern's use, shape, pitfalls, pseudo-code. Read
+- `references/workflow-patterns.md` — choosing table and per-pattern pitfalls. Read
   when choosing or implementing a pattern.
 - `references/multi-agent.md` — split checks, cost, topologies, delegation brief. Read before
   recommending more than one agent.

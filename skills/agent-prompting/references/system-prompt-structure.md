@@ -17,8 +17,8 @@ Delimit sections with XML tags or Markdown headings; pick one per prompt.
 | 7 | Examples | 3–5 canonical cases in `<example>` tags. |
 | 8 | Final reminders | Optional: one or two lines restating the most-missed rule, for long prompts. |
 
-- **Stable first, variable last**, so the prefix caches. No timestamp, request ID or user
-  name in the opening lines (`agent-context` → `references/prompt-caching.md`).
+- **Stable first, variable last**, so the prefix caches (`agent-context` →
+  `references/prompt-caching.md`).
 - **Long documents (20K+ tokens) first, query last.**
 - **Match prompt style to wanted output.** A Markdown-heavy prompt pulls output toward
   Markdown.
@@ -88,8 +88,8 @@ Out of scope: <topics> → <hand-off or refusal wording>, because <reason>.
 ## Reasoning
 
 - **Use native controls first:** thinking/`effort` on Claude, `reasoning_effort` on OpenAI.
-  Tuning effort is often a better lever than switching models. Treat effort and
-  `max_tokens` as ceilings.
+  Treat effort and `max_tokens` as ceilings. Sweep order: `agent-design` →
+  `references/model-and-framework-choice.md`.
 - **"Think" tool or scratchpad step** only for policy-heavy sequential tool chains, and
   only with domain examples of how to think.
 - **At minimal/low effort**, add an explicit "plan, then act" step.

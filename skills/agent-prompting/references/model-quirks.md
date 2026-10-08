@@ -9,7 +9,8 @@ If a line here contradicts your evals, trust the evals and fix this file.
   On migration, strip emphasis and redundant reminders, then add back only what evals
   demand.
 - **Pin model IDs** and record them on every trace (`agent-production`).
-- **Sweep effort/reasoning fresh**; don't carry settings over.
+- **Re-sweep effort/reasoning**; don't carry settings over (`agent-design` →
+  `references/model-and-framework-choice.md`).
 - **Gate migration on your evals**, not public benchmarks.
 - For families not listed here, read the vendor's prompting guide and add a section.
 
@@ -26,20 +27,9 @@ If a line here contradicts your evals, trust the evals and fix this file.
 | Over-spawns subagents. | Delegate only parallel, isolated work; work directly on sequential or single-file tasks. |
 | More sequential with tools. | Keep the explicit parallel-calls instruction. |
 | Step-by-step reasoning requested in tool arguments can trigger a `reasoning_extraction` refusal. | Ask for "a short explanation". |
-| Leaves temporary scripts and helper files behind. | "If you create temporary files, scripts or helpers, remove them at the end of the task." |
 | Verbosity differs by model. | Set length and format explicitly. |
 | Long inputs (20K+ tokens). | Documents first, query last, in `<document><source/><document_content/></document>`; ask for relevant quotes first. |
 | Refusals arrive as a distinct stop reason. | Handle `refusal` with a fallback path. |
-
-## OpenAI GPT-4.1
-
-| Quirk | Do |
-|---|---|
-| Very literal; infers little intent. | One firm, clear sentence corrects a behaviour. Remove instructions you don't mean literally. |
-| Agentic reminders (persistence, use tools don't guess, plan) give large gains. | Include all three (`system-prompt-structure.md` → Tool steering). |
-| Long context: instructions at both top and bottom work best. | Repeat key instructions after the documents; if once, put them above. |
-| JSON is a poor delimiter for large document sets. | XML tags or `ID: … TITLE: … CONTENT: …`. |
-| Schemas pasted into the prompt underperform the `tools` field. | Always use the API field. |
 
 ## OpenAI GPT-5 family
 

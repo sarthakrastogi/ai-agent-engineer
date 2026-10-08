@@ -2,8 +2,8 @@
 
 ## 1. The tool set
 
-Start from the tasks in `design.md`, then design the fewest tools that cover them. An API's
-endpoint list is input, not the answer.
+Start from the tasks (in `design.md` if used), then design the fewest tools that cover them.
+An API's endpoint list is input, not the answer.
 
 | Signal | Action |
 |---|---|
@@ -95,6 +95,14 @@ audit; high: blocking approval on exact arguments).
   inline.
 - Query-building tools bind model-supplied values as parameters; never format them into SQL.
 
+Replace an ungated `execute_sql(query)` with narrow tools split by risk; the model never
+writes SQL, never sees credentials and can't widen its own scope:
+
+| Tool | Risk | Behaviour |
+|---|---|---|
+| `orders_search(customer_email, status, since)` | Low | Read-only, parameterised query, ≤ 50 rows |
+| `orders_issue_refund(order_id, amount, reason, dry_run=true)` | High | `dry_run` returns the exact change; real run needs human approval, uses an idempotency key, checks in code that the end user may refund this order, logs the action |
+
 ## 7. Testing tools with the agent
 
 1. Write 30+ realistic multi-step tasks with real data shapes, plus a held-out set you don't
@@ -106,7 +114,8 @@ audit; high: blocking approval on exact arguments).
 4. Fix the least powerful thing first: description → schema → response shape → merge/split.
 5. Give the agent the failing transcripts and definitions and have it rewrite the
    descriptions.
-6. Re-run both sets; keep changes that improve the held-out set. Log in `experiment-log.md`.
+6. Re-run both sets; keep changes that improve the held-out set. Log the result
+   (`experiment-log.md` if used).
 
 ## 8. Review checklist
 

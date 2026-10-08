@@ -10,7 +10,7 @@ description: >-
   (agent-rag); write-tool permissions pair with agent-guardrails.
 license: MIT
 metadata:
-  version: 0.1.0
+  version: 0.2.0
 ---
 
 # Agent tools
@@ -87,6 +87,8 @@ Design tools for a model that reads every word of the definition and nothing els
 
 ## Outputs
 
+Write these to `agent-engineering/` only if the project keeps one (see `agent-engineer` → *Project record (optional)*); otherwise put them in your reply or the PR description.
+
 - Tool definitions and handlers, or an MCP server, in the user's codebase.
 - `design.md` → Architecture → Tools; `experiment-log.md` entries with eval deltas.
 
@@ -100,5 +102,3 @@ Design tools for a model that reads every word of the definition and nothing els
   agent loops on errors.
 - `references/mcp-servers.md` — when to use MCP, primitives, annotations, transports,
   server-side auth, testing. Read when building or connecting MCP servers.
-- `references/before-after-examples.md` — worked rewrites of bad tools. Read to show the
-  user concrete changes.

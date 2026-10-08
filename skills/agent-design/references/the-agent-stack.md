@@ -84,7 +84,7 @@ becomes a sequential LLM call. Typical result: lower accuracy, opaque failures, 
 The shape that works concentrates intelligence: a cheap model routes and selects inputs, a
 strong model generates, deterministic checks verify.
 
-Use a graph only when one holds, and write which in `design.md`:
+Use a graph only when one holds, and record which (in `design.md` if used):
 
 - **Roles diverge:** different tools, permissions or knowledge per node.
 - **Steps are truly independent** and can run in parallel.

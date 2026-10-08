@@ -95,4 +95,4 @@ it trips, emits its span or attribute, and (for alerts) reaches a human:
 - synthetic cost or latency spike → budget alert.
 
 Run in CI against stubs and periodically in staging/production with tagged synthetic
-traffic. Record results and date under "Verification" in `observability.md`.
+traffic. Record results and date (under "Verification" in `observability.md` if used).

@@ -27,12 +27,13 @@ make conflicting ones. Research fans out; synthesis and edits stay in one agent.
 - Coordination channels grow as n(n−1)/2; each is a latency and failure point. Sequential
   agent calls compound latency.
 
-Write in `design.md`: `tasks/day × (lead tokens + workers × worker tokens) × price`. If task
-value doesn't cover ~15x chat cost, don't split.
+Estimate `tasks/day × (lead tokens + workers × worker tokens) × price` (in `design.md` if
+used). If task value doesn't cover that, don't split.
 
 ## Checks before splitting
 
-Answer each in `design.md`. Split only if 1 and 2 are "yes" and the rest are handled.
+Answer each (in `design.md` if used). Split only if 1 and 2 are "yes" and the rest are
+handled.
 
 1. Does a single-agent baseline fail the eval for a reason splitting fixes (context overflow,
    domain tool confusion, wall-clock), not one better tools or prompts would fix?

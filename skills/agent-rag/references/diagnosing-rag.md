@@ -24,7 +24,7 @@ walk the stages in order, and record only the **first** failing stage; later one
 |---|---|---|---|
 | 1 | Corpus | Is the answer in the source at all? Current version? | Add or refresh the source |
 | 2 | Ingestion / chunking | Survived parsing (tables, PDFs, headers)? Split across chunks or stripped of findable context? | Parser; structure-aware chunking; chunk headers |
-| 3 | Retrieval | In the top candidate k? Try the literal query and a keyword search; try exact vector search | Keyword-only hit → hybrid. Neither → rewriting, contextual retrieval, question-aligned chunks, missing filter. Exact hits but ANN misses → index params (`vector-indexes.md`) |
+| 3 | Retrieval | In the top candidate k? Try the literal query and a keyword search; try exact vector search | Keyword-only hit → hybrid. Neither → rewriting, contextual retrieval, question-aligned chunks, missing filter. Exact hits but ANN misses → index params (`retrieval-and-ranking.md` → Vector index) |
 | 4 | Ranking / filtering | Ranked below the cut, or removed by a filter? Or a constraint-breaking result ranked in? | Reranker; candidate and final k; fix the filter; move constraints into filters |
 | 5 | Context assembly | In the prompt but buried mid-context, truncated, duplicated or contradicted? Across traces: citations cluster at first/last slots, never the middle → position bias | Best at the edges; dedup; fewer chunks; resolve version conflicts |
 | 6 | Generation | Right chunk clearly in context, answer still wrong or unfaithful? | Answer only from context, quote-first, allow "I don't know", require citations; then model |
@@ -58,7 +58,7 @@ corpus 3 (8%) | ingestion 11 (28%) | retrieval 14 (35%) | ranking 5 (12%) | asse
   are measured.
 - Don't tune generation before retrieval is validated; the fix regresses when the query mix
   shifts.
-- Log each change in `experiment-log.md` with metric delta, added latency and cost.
+- Log each change with metric delta, added latency and cost (`experiment-log.md` if used).
 
 ## Weak query clusters and the flywheel
 

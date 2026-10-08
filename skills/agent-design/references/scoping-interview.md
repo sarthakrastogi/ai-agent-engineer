@@ -7,7 +7,7 @@
 - When the user doesn't know, propose a concrete default with a reason ("p95 ≤ 10 s because
   it's interactive — change it if not") and mark it "proposed — confirm with user".
 - Ask for **5–10 real inputs with good outputs**. They seed the eval set.
-- Stop when you can fill Problem, Success criteria and Scope in `design.md`.
+- Stop when you can fill Problem, Success criteria and Scope (in `design.md` if used).
 
 ## Question bank
 

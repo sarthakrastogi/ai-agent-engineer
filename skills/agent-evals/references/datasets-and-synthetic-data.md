@@ -28,7 +28,7 @@ the generator; confirm on real queries.
 
 ## Case schema
 
-One JSON object per line in `agent-engineering/datasets/<name>.jsonl`:
+One JSON object per line in `datasets/<name>.jsonl` (under `agent-engineering/` if used):
 
 ```json
 {"id": "refund-017",

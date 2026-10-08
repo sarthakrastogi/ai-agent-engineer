@@ -5,8 +5,8 @@ the whole prompt unless asked.
 
 ## Before reading
 
-- [ ] An eval exists. If not, say so first: without one, the review is opinion
-  (`agent-evals`).
+- [ ] An eval exists. If not, for a non-trivial change propose the smallest eval that
+  would show it worked (`agent-evals`); if declined, say plainly the review is unevaluated.
 - [ ] Target model and provider are known (`model-quirks.md`).
 - [ ] You have read 10–20 real traces. Trace evidence outranks inference from the text.
 
@@ -68,7 +68,7 @@ the whole prompt unless asked.
 
 - [ ] Versioned file, loaded by name; version recorded on traces.
 - [ ] Variants are template variables, not forks.
-- [ ] The change has an `experiment-log.md` entry with the eval delta.
+- [ ] The change records its eval delta (`experiment-log.md` if used).
 
 ## Report format
 

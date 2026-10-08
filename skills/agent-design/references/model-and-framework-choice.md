@@ -43,8 +43,8 @@ graph frameworks (LangGraph, Pydantic AI, CrewAI, LlamaIndex workflows); durable
 
 1. **Baseline every LLM step on the most capable model** at generous reasoning effort. This
    proves solvability and sets the ceiling. Don't start small before you know it can be done.
-2. **Build the eval first** (`agent-evals`), 20–50 real cases. Order: evals → accuracy target
-   → cost and latency.
+2. **Build a small eval** (`agent-evals`), 20–50 real cases; the sweep and step-down below
+   need it. Order: evals → accuracy target → cost and latency.
 3. **Sweep effort before switching models.** Run the eval at each effort level; plot
    accuracy vs cost per task. Effort is often a better lever than model choice.
 4. **Step down per step.** Try a smaller model on each step; keep it where the eval holds
@@ -52,8 +52,8 @@ graph frameworks (LangGraph, Pydantic AI, CrewAI, LlamaIndex workflows); durable
    planning and synthesis last. Small or open-weight models qualify on the same eval.
 5. **Multi-model only after the sweep**, and only if it beats the single model's full
    effort/cost curve.
-6. **Record** pinned snapshot IDs (not aliases), effort settings, eval result and reason in
-   `design.md`. Track retirement dates.
+6. **Record** pinned snapshot IDs (not aliases), effort settings, eval result and reason
+   (in `design.md` if the project uses `agent-engineering/`). Track retirement dates.
 
 Start efficiency-first (small model, low effort) only for simple, high-volume
 classification or extraction where latency dominates.
@@ -64,19 +64,18 @@ classification or extraction where latency dominates.
 |---|---|---|---|
 | Routing by difficulty | Classifier sends easy inputs small, hard ones large | Difficulty is detectable up front | Measure router accuracy; misroutes cost quality |
 | Advisor | Cheap executor consults a frontier model on hard decisions | Serial work hard only in spots | Fails if consults collapse; prompt for 2–3 per task |
-| Orchestrator | Frontier coordinator + cheap parallel workers | Independent bulk work | ~50% cheaper, several times faster, ~12 points less accurate |
-| Single model, lower effort | One model throughout | Dependent chains | Usually 20–30% cheaper than multi-model here |
+| Orchestrator | Frontier coordinator + cheap parallel workers | Independent bulk work | Can be much cheaper and faster, but often loses some accuracy; measure it |
+| Single model, lower effort | One model throughout | Dependent chains | Often cheaper than multi-model here |
 | Small checker | Small model screens inputs, verifies outputs, flags low confidence | High volume, fast gate before an expensive call | Validate the checker like a judge (`agent-evals`) |
 
 ### Cost and latency
 
-- Output tokens dominate latency: halving output roughly halves latency; halving input saves
-  1–5%.
 - Measure **cost per task**, not per token: a cheaper model needing more turns can cost more.
-- Caching, batching, streaming: `agent-production`.
+- Latency, caching, batching, streaming: `agent-production` →
+  `references/cost-and-latency.md`.
 
 ### Changing models later
 
 A model change is a behaviour change: rerun the full eval, redo the effort sweep, remove
-over-prompting written for the weaker model, re-baseline cost and latency, log it in
-`experiment-log.md` (`agent-production` → `references/model-migration.md`).
+over-prompting written for the weaker model, re-baseline cost and latency, and log it
+(`experiment-log.md` if used; `agent-production` → `references/model-migration.md`).

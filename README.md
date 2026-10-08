@@ -10,12 +10,14 @@ stages with you on *your* codebase. It doesn't generate a starter app, and it wo
 
 ## Why this one
 
-- **One connected lifecycle.** Every stage writes to a shared record in your repo
-  (`agent-engineering/`): design → evals → fixes → experiment log.
+- **One connected lifecycle.** For a project that spans sessions, every stage can write to
+  a shared record in your repo (`agent-engineering/`): design → evals → fixes → experiment
+  log. It's opt-in; one-off changes report their evidence in the reply or PR instead.
 - **Vendor-neutral.** OpenTelemetry/OpenInference tracing to any backend; framework-agnostic
   eval guidance.
-- **Evidence enforced.** Hooks remind the agent to run evals after behaviour changes and ask
-  once before it finishes if it didn't.
+- **Evidence enforced, not ceremony.** Hooks notice prompt and tool edits, even a one-word
+  wording change, and ask once before the agent finishes if no eval ran. The agent can
+  still finish by saying plainly that the change is unevaluated.
 
 ## Install
 
@@ -57,10 +59,8 @@ agent ▸ (loads agent-engineer → agent-accuracy)
            in a reply appeared in a tool result. Run it 5× for a baseline.
         2. Fix cheapest first: add get_order/list_orders tools that return an explicit
            not_found → check order numbers in code before sending → tighten the prompt.
-        3. Re-run the eval after each change and log it in
-           agent-engineering/experiment-log.md.
+        3. Re-run the eval after each change and report the delta.
         Not RAG or fine-tuning: this is a missing data source, not missing knowledge.
-        Can I create agent-engineering/?
 ```
 
 You don't need any special commands. Say "build an agent that…", "add evals", "add
@@ -88,7 +88,6 @@ the stage. To call a skill directly, use `/agent-engineer:agent-evals` in Claude
 
 | Subagent | Job |
 |---|---|
-| `agent-architect` | Lays out architecture options with their trade-offs |
 | `trace-analyst` | Builds a failure taxonomy from real traces |
 | `eval-engineer` | Builds datasets and judges, and validates the judges |
 | `rag-diagnostician` | Finds where in the RAG pipeline answers get lost |
@@ -98,10 +97,10 @@ the stage. To call a skill directly, use `/agent-engineer:agent-evals` in Claude
 
 | Hook | What it does |
 |---|---|
-| Session-start profile | Lists the LLM frameworks found, and whether tracing and evals exist |
+| Session-start profile | Lists the LLM frameworks found (from manifests, or imports if there's no manifest), and whether tracing and evals exist |
 | Secret guard | Blocks API keys being written into source files |
-| Behaviour-change reminder | Says, once, that a changed prompt or tool needs an eval run |
-| Eval gate | Fires once per session, before the agent finishes |
+| Behaviour-change reminder | Says, once, that a changed prompt or tool needs an eval run. Reads the lines around an edit, so a wording-only prompt change counts |
+| Eval gate | Fires once per session, before the agent finishes, if behaviour changed and no eval command ran (reading or listing eval files doesn't count) |
 
 Configure the hooks with environment variables:
 

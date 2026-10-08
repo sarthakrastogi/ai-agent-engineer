@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.2.0 — unreleased
+
+Fixes:
+- Eval gate never armed on a wording-only prompt edit (`"concise"` → `"friendly"`), the most
+  common kind. The post-write hook now also reads the lines around the edit on disk.
+- Anthropic's `system=` kwarg, `system:` (AI SDK / JSON) and `SYSTEM = …` constants now count
+  as prompt edits.
+- Any command containing "eval" counted as an eval run, so `python retrieval.py`,
+  `cat evals/README.md` or `ls evals` silently disarmed the gate. Read-only commands no
+  longer count, and "eval" must be a delimited token.
+- Session-start profile was silent for projects with no dependency manifest; it now falls
+  back to imports in top-level source files.
+- NotebookEdit writes were invisible to the hooks.
+- Routing eval ran inside the pack repo, where the model read AGENTS.md and the skill files
+  directly instead of loading skills. It now runs each case in a copy of `evals/fixture/`.
+
+Changes:
+- Session-start note is a project profile, no longer an order to load `agent-engineer` first
+  in every LLM-adjacent repo.
+- One evidence rule everywhere: propose the smallest eval for a non-trivial change; if the
+  user declines or it's cosmetic, make it and say it's unevaluated. Replaces the conflicting
+  "no eval, no change" rules in `agent-prompting` and `agent-accuracy`.
+- `agent-engineering/` is opt-in for multi-session projects; otherwise evidence goes in the
+  reply or PR. Templates moved into the skills that own them.
+- Router skill slimmed to the stack map, shortcuts and conventions, and narrowed to
+  ambiguous or broad requests.
+- Removed the `agent-architect` subagent (design needs the user in the loop). The other
+  subagents preload their skill via `skills:` instead of copying its procedure.
+- Cut generic material and duplicated facts from references (each fact has one home);
+  removed `vector-indexes.md` and `before-after-examples.md` (merged), the GPT-4.1 quirks.
+- Routing eval: negative cases inside an LLM repo, a breadth metric, `--jobs`, `CLAUDE_BIN`.
+
 ## 0.1.0 — unreleased
 
 - First draft: router skill + 10 lifecycle skills (design, tools, prompting, context, rag,

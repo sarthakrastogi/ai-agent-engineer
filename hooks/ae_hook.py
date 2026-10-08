@@ -20,6 +20,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import shlex
 import sys
 import tempfile
 import time
@@ -28,6 +29,8 @@ from pathlib import Path
 ARTIFACT_DIR = os.environ.get("AE_DIR", "agent-engineering")
 MAX_FILE_BYTES = 256_000
 STATE_TTL_S = 7 * 24 * 3600
+CONTEXT_LINES_ABOVE = 40  # how far above an edit to look for the prompt/tool it belongs to
+CONTEXT_LINES_BELOW = 5
 
 # --------------------------------------------------------------------------- detection
 
@@ -57,6 +60,10 @@ DEP_FILES = (
     "pyproject.toml", "requirements.txt", "requirements-dev.txt", "requirements.in",
     "setup.py", "setup.cfg", "Pipfile", "uv.lock", "poetry.lock", "package.json",
 )
+SOURCE_SUFFIXES = (".py", ".ts", ".tsx", ".js", ".mjs")
+MAX_SCANNED_SOURCES = 40
+PY_IMPORT = re.compile(r"^\s*(?:from|import)\s+([A-Za-z_][\w.]*)", re.M)
+JS_IMPORT = re.compile(r"(?:\bfrom|\brequire\(|\bimport\()\s*[\"']([^\"'.][^\"']*)[\"']")
 EVAL_PATHS = ("evals", "eval", "tests/evals", "tests/eval", "promptfooconfig.yaml",
               "promptfooconfig.yml")
 
@@ -77,20 +84,33 @@ PLACEHOLDER = re.compile(r"(x{6,}|your[_\-]?|example|placeholder|dummy|redacted|
 
 BEHAVIOUR_PATH = re.compile(r"(^|/)(prompts?|instructions|system[_\-]?prompts?)(/|\.|_|-)|"
                             r"\.(prompt|prompty|j2|jinja2?)$", re.I)
+# Markers of prompt text. Also used on the lines around an edit, so keep it to prompts.
+PROMPT_CONTENT = (
+    r"system_prompt|systemPrompt|\b(?:[A-Z]+_)*SYSTEM(?:_[A-Z]+)*\s*=[^=]|\bsystem\s*[=:][^=]|"
+    r"[\"']system[\"']\s*:|[\"']role[\"']\s*:\s*[\"']system[\"']|"
+    r"role\s*=\s*[\"']system[\"']|\binstructions\s*=|"
+    r"@tool\b|@function_tool\b|\binput_schema\b|\bfunction_declarations\b"  # tool descriptions
+)
+PROMPT_MARKER = re.compile(PROMPT_CONTENT)
 BEHAVIOUR_CONTENT = re.compile(
-    r"system_prompt|SYSTEM_PROMPT|systemPrompt|[\"']role[\"']\s*:\s*[\"']system[\"']|"
-    r"role\s*=\s*[\"']system[\"']|\binstructions\s*=|@tool\b|@function_tool\b|"
-    r"\btools\s*=\s*\[|\binput_schema\b|\bfunction_declarations\b|\bFunctionTool\b|"
+    PROMPT_CONTENT + r"|\btools\s*=\s*\[|\bFunctionTool\b|"
     r"\bAgent\(|\bcreate_react_agent\b|\bStateGraph\(|\bmodel\s*=\s*[\"'][^\"']*"
     r"(claude|gpt|gemini|llama|mistral|sonnet|opus|haiku)",
 )
 SKIP_DIRS = ("node_modules/", ".git/", ".venv/", "venv/", "dist/", "build/", "__pycache__/",
              ".claude/", ".agents/", ".codex/", ".cursor/", ".gemini/", ".opencode/")
 PATCH_FILE = re.compile(r"^\*\*\* (?:Add|Update) File: (.+)$", re.M)
-SHELL_EVAL_BUILTIN = re.compile(r"(^|[;&|(]\s*)eval\s")
-EVAL_COMMAND = re.compile(
-    r"\b(promptfoo|deepeval|ragas|inspect\s+eval|braintrust\s+eval|evaluate)\b|"
-    r"[\w/.\-]*evals?[\w/.\-]*", re.I)
+# A shell token that names an eval: `evals/`, `run_eval.py`, `npm run eval`, `promptfoo`.
+# Delimited, so `retrieval.py` and `medieval` don't count.
+EVAL_TOKEN = re.compile(r"(^|[/._\-:])(evals?|evaluate|evaluation)([/._\-:]|$)|"
+                        r"^(promptfoo|deepeval|ragas|inspect|braintrust|openevals)$", re.I)
+# Commands that only look at eval files, so they never count as running evals.
+READ_ONLY_COMMANDS = {"cat", "less", "more", "head", "tail", "ls", "tree", "grep", "rg", "ag",
+                      "find", "fd", "git", "echo", "printf", "wc", "sed", "awk", "diff", "bat",
+                      "vi", "vim", "nano", "code", "open", "file", "stat", "mkdir", "touch",
+                      "cp", "mv", "rm", "ln", "chmod", "eval", "source", "."}
+COMMAND_WRAPPERS = {"sudo", "time", "env", "nice", "nohup", "exec", "command", "timeout"}
+SHELL_SEPARATORS = re.compile(r"&&|\|\||[;|&\n]")
 
 
 def read_text(p: Path) -> str:
@@ -128,6 +148,24 @@ def dep_names(root: Path) -> set[str]:
     return found
 
 
+def import_names(root: Path) -> set[str]:
+    """Packages imported by top-level source files, for projects with no dependency manifest."""
+    found: set[str] = set()
+    try:
+        files = [p for p in root.iterdir() if p.suffix in SOURCE_SUFFIXES][:MAX_SCANNED_SOURCES]
+    except OSError:
+        return found
+    for f in files:
+        text = read_text(f)
+        for mod in PY_IMPORT.findall(text):
+            found.add(mod.split(".")[0].lower().replace("_", "-"))
+            found.add(mod.lower().replace(".", "-").replace("_", "-"))  # google.genai → google-genai
+        for pkg in JS_IMPORT.findall(text):
+            parts = pkg.lower().split("/")
+            found.add("/".join(parts[:2]) if pkg.startswith("@") else parts[0])
+    return found
+
+
 def matches(deps: set[str], libs: set[str]) -> list[str]:
     hits = set()
     for dep in deps:
@@ -138,6 +176,8 @@ def matches(deps: set[str], libs: set[str]) -> list[str]:
 
 def profile(root: Path) -> dict:
     deps = dep_names(root)
+    if not matches(deps, LLM_LIBS):
+        deps |= import_names(root)
     art = root / ARTIFACT_DIR
     return {
         "llm": matches(deps, LLM_LIBS),
@@ -157,7 +197,7 @@ def find_secret(text: str) -> str | None:
     return None
 
 
-def is_behaviour_change(path: str, text: str) -> bool:
+def is_behaviour_change(path: str, text: str, marker: re.Pattern = BEHAVIOUR_CONTENT) -> bool:
     norm = path.replace("\\", "/")
     if any(s in norm for s in SKIP_DIRS) or f"{ARTIFACT_DIR}/" in norm:
         return False
@@ -165,12 +205,50 @@ def is_behaviour_change(path: str, text: str) -> bool:
         return True
     if norm.endswith((".md", ".txt", ".rst", ".lock", ".json")) and "prompt" not in norm.lower():
         return False
-    return bool(BEHAVIOUR_CONTENT.search(text))
+    return bool(marker.search(text))
+
+
+def edit_context(path: Path, written: str) -> str:
+    """The lines just above and around an edit, read back from disk after the write.
+
+    A wording-only prompt edit ("concise" → "friendly") doesn't contain the `SYSTEM_PROMPT =`
+    or `system=` that makes it a prompt edit; the surrounding lines do.
+    """
+    text = read_text(path)
+    if not text:
+        return ""
+    at = text.find(written.strip()) if written.strip() else -1
+    if at < 0:  # multi-edit or patch: anchor on the first added line found in the file
+        for line in written.splitlines():
+            s = line.lstrip("+").strip()
+            if len(s) >= 8 and s in text:
+                at = text.find(s)
+                break
+    if at < 0:
+        return ""
+    lines = text.splitlines()
+    row = text.count("\n", 0, at)
+    return "\n".join(lines[max(0, row - CONTEXT_LINES_ABOVE): row + CONTEXT_LINES_BELOW])
 
 
 def is_eval_command(cmd: str) -> bool:
-    cleaned = SHELL_EVAL_BUILTIN.sub(" ", cmd)
-    return bool(EVAL_COMMAND.search(cleaned))
+    in_eval_dir = False
+    for segment in SHELL_SEPARATORS.split(cmd):
+        try:
+            tokens = shlex.split(segment)
+        except ValueError:
+            tokens = segment.split()
+        while tokens and ("=" in tokens[0] or tokens[0] in COMMAND_WRAPPERS):
+            tokens = tokens[1:]
+        if not tokens:
+            continue
+        program = os.path.basename(tokens[0])
+        named = any(EVAL_TOKEN.search(t) for t in tokens)
+        if program == "cd":
+            in_eval_dir = named
+        elif program not in READ_ONLY_COMMANDS and (named or in_eval_dir):
+            return True
+    return False
 
 
 # --------------------------------------------------------------------------- state
@@ -202,7 +280,7 @@ def save_state(session: str, state: dict) -> None:
 # --------------------------------------------------------------------------- payloads
 
 def strings_in(obj, keys=("content", "new_string", "newString", "new_str", "text", "patch",
-                          "input", "contents", "file_text")) -> str:
+                          "input", "contents", "file_text", "new_source")) -> str:
     """Collect text being written, across harness tool-input shapes."""
     out: list[str] = []
     if isinstance(obj, dict):
@@ -242,6 +320,7 @@ class Event:
                 self.tool_input = {"input": self.tool_input}
         ti = self.tool_input if isinstance(self.tool_input, dict) else {}
         self.file_path = str(first(ti, "file_path", "filePath", "path", "absolute_path",
+                                   "notebook_path",
                                    default=first(payload, "file_path", default="")))
         self.command = str(first(ti, "command", "cmd", default=first(payload, "command",
                                                                     default="")))
@@ -301,9 +380,8 @@ def on_session_start(ev: Event) -> dict:
     p = profile(ev.cwd)
     if not p["llm"] and p["artifacts"] is None:
         return {}
-    lines = ["[agent-engineer] This project builds on LLMs. For any work on the agent's "
-             "behaviour, design, prompts, tools, retrieval, evals, tracing or deployment, use "
-             "the `agent-engineer` skill first — it routes to the specialised agent-* skills."]
+    lines = ["[agent-engineer] Project profile, for tasks that change how the LLM agent "
+             "behaves (prompts, tools, retrieval, evals, tracing). Ignore it for unrelated work."]
     if p["llm"]:
         lines.append(f"- LLM libraries: {', '.join(p['llm'][:8])}")
     lines.append(f"- Tracing: {', '.join(p['tracing']) if p['tracing'] else 'none detected'}")
@@ -318,8 +396,8 @@ def on_session_start(ev: Event) -> dict:
     if not evals:
         gaps.append("no evals (see agent-evals)")
     if gaps:
-        lines.append(f"- Gaps: {'; '.join(gaps)}. Mention these before claiming any "
-                     "behaviour change is an improvement.")
+        lines.append(f"- Gaps: {'; '.join(gaps)}. A behaviour change here can't be shown to "
+                     "be an improvement; say so rather than claim it.")
     return {"context": "\n".join(lines)}
 
 
@@ -342,7 +420,9 @@ def on_pre_write(ev: Event) -> dict:
 
 
 def on_post_write(ev: Event) -> dict:
-    changed = [p for p in ev.file_paths if is_behaviour_change(p, ev.write_text)]
+    changed = [p for p in ev.file_paths
+               if is_behaviour_change(p, ev.write_text)
+               or is_behaviour_change(p, edit_context(ev.cwd / p, ev.write_text), PROMPT_MARKER)]
     if not changed:
         return {}
     st = load_state(ev.session)

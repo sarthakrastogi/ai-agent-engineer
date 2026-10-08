@@ -2,26 +2,12 @@
 
 ## Before changing anything
 
-1. **Pin:** model ID (dated snapshot, not alias), sampling params (temperature,
-   effort/thinking, max tokens), prompt, tool, dataset, judge prompt and model versions,
-   fixtures, git SHA.
-2. **Freeze the environment:** mock or record live tools, freeze the retrieval index, fix
-   "now" in time-dependent cases.
-3. **Baseline ≥ 3 runs.** The spread is the noise floor; nothing smaller is real.
-4. **Write the hypothesis** in the log entry: mode, why the change helps, expected
+1. **Set up the comparison** per `agent-evals` → `references/quick-paths.md` (*Comparing two
+   versions*): pinned versions, frozen environment, ≥ 3-run baseline as the noise floor.
+2. **Write the hypothesis** in the log entry: mode, why the change helps, expected
    direction and size.
 
 One change per experiment. If changes must ship together, measure them separately first.
-
-## Variance sources
-
-| Source | Control |
-|---|---|
-| Model sampling | k trials per case; temperature where supported |
-| Tools / environment | Mocks, recorded responses, fixtures, clean state per trial |
-| Judge noise | Validated judge, temperature 0, cached verdicts |
-| Small or clustered dataset | More cases; clustered SEs |
-| Dataset drift | Compare on the same dataset version only |
 
 ## Runs to reproduce a failure
 
@@ -38,19 +24,11 @@ P(≥ 1 failure in k runs) at true failure rate q, `1 − (1 − q)^k`:
 - **Confirm a fix (rule of three):** 0 failures in n runs bounds the rate below ~3/n. 10
   clean runs still allow ~30%; proving "under 10%" takes ~30 clean runs.
 
-## Comparing versions
-
-Procedure and `paired_diff` helper: `agent-evals` → `quick-paths.md` (*Comparing two
-versions*); CI table: `agent-evals` → `ci-and-online-evals.md`. Here:
-
-- Compare on **dev** while iterating; test once at the end.
-- ~20 cases suffice for large effects (30% → 80%), not for 3-point gains.
-
 ## Deciding
 
-- **Keep:** paired-difference CI on the target mode above zero (or the user's margin), no
-  other mode's CI below −margin, cost and latency within budget. Confirm once on test, then
-  add reproduced failures to the regression set.
+- **Keep:** the quick-paths verdict is "better" on the target mode with no other mode below
+  −margin, and cost and latency are within budget. Confirm once on test, then add
+  reproduced failures to the regression set.
 - **Revert:** target didn't move beyond noise, or a regression appeared elsewhere.
 - **Iterate:** target moved but a regression appeared; localise the regression before
   stacking another change.
@@ -72,7 +50,8 @@ versions*); CI table: `agent-evals` → `ci-and-online-evals.md`. Here:
 
 ## Log entry
 
-Append to `agent-engineering/experiment-log.md`, failed experiments included:
+Log every experiment, failed ones included (in `agent-engineering/experiment-log.md` if the
+project uses it):
 
 ```markdown
 ## 2026-10-06 — Refund amount from order record
@@ -88,8 +67,8 @@ Append to `agent-engineering/experiment-log.md`, failed experiments included:
 
 Stop and tell the user which applies:
 
-- Target in `eval-plan.md` met with the CI's lower bound above it, or business break-even
-  reached.
+- The agreed target (`eval-plan.md` if used) met with the CI's lower bound above it, or
+  business break-even reached.
 - Last 2–3 experiments within noise at this rung, and the next rung costs more than the
   remaining failures are worth.
 - Remaining failures need a product decision; list them.

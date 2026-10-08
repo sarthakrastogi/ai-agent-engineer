@@ -85,5 +85,5 @@ behaviour failure gets an eval case.
   Pinned snapshots reduce but don't remove this (retrieval data, tools, serving change).
 - Respond with a logged change: pin a snapshot if on an alias, tighten the prompt, or move
   affected query types to another model via model-migration.md. Never lower the threshold
-  to pass; thresholds are product decisions in `eval-plan.md`.
+  to pass; thresholds are product decisions (`eval-plan.md` if used).
 - Run on a test tenant or with side-effecting tools stubbed.
