@@ -1,1 +1,0 @@
-Add a tool so the inbox agent can issue refunds directly while it's handling a customer's email. The payments client is in payments.py.

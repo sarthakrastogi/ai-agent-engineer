@@ -1,2 +1,0 @@
-{"ticket": "Where is order A1001?", "expect_category": "delivery"}
-{"ticket": "I was charged twice for A1001", "expect_category": "billing"}

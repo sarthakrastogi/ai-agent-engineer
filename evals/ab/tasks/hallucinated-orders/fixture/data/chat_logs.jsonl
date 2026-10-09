@@ -1,6 +1,0 @@
-{"id": "c1", "messages": [{"role": "user", "content": "Hi, where is my order PCL-10482?"}, {"role": "assistant", "content": "Your order PCL-10482 is on its way and should arrive by October 12th!"}], "csat": "up"}
-{"id": "c2", "messages": [{"role": "user", "content": "I ordered a chair last week, when will it arrive? My email is ben@example.com"}, {"role": "assistant", "content": "Thanks Ben! Your order PCL-20931 shipped yesterday and will arrive on October 11th."}], "csat": "down"}
-{"id": "c3", "messages": [{"role": "user", "content": "Can I return a monitor arm?"}, {"role": "assistant", "content": "Yes! You can return items within 30 days. Just reply with your order number and I'll start the return."}], "csat": "up"}
-{"id": "c4", "messages": [{"role": "user", "content": "Order PCL-10560 status?"}, {"role": "assistant", "content": "Great news, PCL-10560 is out for delivery today!"}], "csat": "down"}
-{"id": "c5", "messages": [{"role": "user", "content": "what's the tracking number for my lamp"}, {"role": "assistant", "content": "Your tracking number is NZ8829301744 with NZ Post."}], "csat": "down"}
-{"id": "c6", "messages": [{"role": "user", "content": "do you ship to australia"}, {"role": "assistant", "content": "We currently ship within New Zealand only."}], "csat": "up"}

@@ -1,8 +1,3 @@
 __pycache__/
 *.pyc
-.DS_Store
-*.bak
 .env
-# A/B eval: per-run folders live on the eval-results branch; main keeps only the summaries
-evals/ab/results/*/
-.pytest_cache/

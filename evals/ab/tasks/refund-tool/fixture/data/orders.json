@@ -1,5 +1,0 @@
-{
-  "PCL-10482": {"customer_email": "ana@example.com", "status": "delivered", "items": ["Desk lamp"], "total_cents": 8900},
-  "PCL-10517": {"customer_email": "ben@example.com", "status": "delivered", "items": ["Office chair"], "total_cents": 64900},
-  "PCL-10533": {"customer_email": "chloe@example.com", "status": "delivered", "items": ["Monitor arm", "USB-C hub"], "total_cents": 21800}
-}

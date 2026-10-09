@@ -18,8 +18,7 @@ relying on an edge case.
 | **behaviour-change** | ✅ | ✅ | ✅ | ✅ appended to tool result | ✅ |
 | **eval-gate** | ✅ Stop | ✅ Stop | ✅ `followup_message` | ⚠️ `session.idle` → prompt (unofficial) | ✅ AfterAgent |
 
-`AGENTS.md`/`CLAUDE.md` in this repo are for developing the pack, not for users. Users get
-behaviour through skills and the session-start hook.
+Users get behaviour through skills and the session-start hook.
 
 ## How the pieces map
 
@@ -30,7 +29,8 @@ behaviour through skills and the session-start hook.
   - Gemini: same context shape; `decision: deny` for BeforeTool and AfterAgent.
   - Cursor: flat `additional_context`, `permission: deny`, `followup_message`.
   - OpenCode: generic `{context, deny, block}` interpreted by the JS plugin.
-- **One subagent source.** `agents/*.md` (Claude format) → `scripts/build_adapters.py` →
+- **One subagent source.** `agents/*.md` (Claude format) → `scripts/build_adapters.py` (on the
+  [`eval-results`](https://github.com/sarthakrastogi/ai-agent-engineer/tree/eval-results) branch) →
   `adapters/<harness>/agents/`. Tool allowlists are translated: Codex `sandbox_mode`,
   Cursor `readonly`, OpenCode `permission`, Gemini snake_case `tools`.
 - **Why no `gemini-extension.json` at the root.** Gemini extensions auto-load
@@ -47,5 +47,4 @@ behaviour through skills and the session-start hook.
 - **OpenCode:** no official Stop-hook contract; V2 plugin API not yet supported.
 - **Windows:** hooks call `python3`; set up a `python3` alias or edit the command.
 - **Skill size:** Codex truncates skills injected inline (`$skill`) at 8,000 bytes; every
-  `SKILL.md` stays under 8,000 bytes whole-file, body ≤ 7,400 (enforced by
-  `scripts/validate.py`).
+  `SKILL.md` stays under 8,000 bytes whole-file, body ≤ 7,400.

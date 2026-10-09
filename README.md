@@ -118,12 +118,6 @@ Configure the hooks with environment variables:
 
 ## Developing the pack
 
-```bash
-python3 scripts/validate.py --strict     # spec, size budgets, links, manifests
-python3 scripts/build_adapters.py        # regenerate per-harness subagents
-python3 -m unittest discover -s tests    # hooks and tooling
-python3 evals/run_routing.py             # does each prompt load the right skill? (Claude Code)
-python3 scripts/bump_version.py 0.2.0    # set the version everywhere
-```
-
-Read [docs/AUTHORING.md](docs/AUTHORING.md) before editing a skill.
+`main` contains only what the plugin installs. Tests, build scripts, the routing eval and
+the A/B experiment are on the [`eval-results`](https://github.com/sarthakrastogi/ai-agent-engineer/tree/eval-results) branch, with a contributor guide in
+[docs/AUTHORING.md](https://github.com/sarthakrastogi/ai-agent-engineer/blob/eval-results/docs/AUTHORING.md).
