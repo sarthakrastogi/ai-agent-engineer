@@ -625,7 +625,7 @@ evals/ab/
 ├── run_ab.py                  runs both arms, records cost/time/tests/skills
 ├── grade_ab.py                judge v2: blinded two-judge grading with tie-break
 ├── report_ab.py               summary.md (auditor) / summary-judge.md, with bootstrap CIs
-└── results/<task>/<arm>-<n>/  project, diff, run.json, audit.json, grade.json per run
+└── results/summary*.md|json   summaries; per-run folders are on the eval-results branch
 ```
 
 ```bash
@@ -640,10 +640,11 @@ Runs are skipped if their results already exist, so you can add tasks or runs
 incrementally. The auditor pass (`audit.json`) was run with Claude Code subagents on blinded
 copies of each run; [evals/ab/README.md](../evals/ab/README.md) describes how to repeat it.
 
-**Install size:** The 48 run folders (14 MB with diffs and transcripts) are on the
-[`eval-results` branch](https://github.com/sarthakrastogi/ai-agent-engineer/tree/eval-results);
-`main` keeps only the summary tables. When users install the plugin, they get the full docs and
-skills (~1 MB) without the example runs. Raw transcripts are kept locally and not committed,
+**Where the runs are:** the 48 run folders (each run's final project, diff, `run.json`,
+`audit.json` and `grade.json`) are on the
+[`eval-results` branch](https://github.com/sarthakrastogi/ai-agent-engineer/tree/eval-results),
+so they aren't installed with the plugin. `main` keeps only the summaries. Check out that
+branch to inspect a run or re-run `report_ab.py`. Raw transcripts aren't committed anywhere,
 since they contain local paths and session metadata.
 
 The pack also has a cheaper **routing eval** (`evals/run_routing.py`, 34 prompts) that checks

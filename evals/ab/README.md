@@ -19,7 +19,8 @@ python3 evals/ab/run_ab.py --retest             # re-run every saved project's t
   denied explicitly (`python3 *` would otherwise allow `python3 -m pip install`).
 - The judge gets the diff and final message inline, with every tool disabled. A judge given
   read tools sometimes skipped reading and invented evidence.
-- Results for the plugin v0.2.0 arm are kept as `with-v0.2-<n>`; `with-<n>` is the current
-  version. Raw transcripts stay local (gitignored).
+- Per-run folders (`results/<task>/<arm>-<n>/`) are on the `eval-results` branch so they
+  aren't installed with the plugin; `main` keeps `results/summary*`. Runs for plugin v0.2.0
+  are `with-v0.2-<n>`, and `with-<n>` is the current version. Raw transcripts aren't committed.
 
 The write-up, with results and caveats, is in [docs/README.md](../../docs/README.md#does-it-work-the-ab-experiment).

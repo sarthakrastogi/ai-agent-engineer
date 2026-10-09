@@ -1,5 +1,0 @@
- app.py            |  2 +-
- prompts/triage.md | 14 +++++++++++---
- tests/test_app.py | 14 ++++++++++++++
- triage.py         |  2 +-
- 4 files changed, 27 insertions(+), 5 deletions(-)
