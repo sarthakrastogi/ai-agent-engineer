@@ -638,8 +638,13 @@ python3 evals/ab/report_ab.py --grader judge # judge v2 grades
 
 Runs are skipped if their results already exist, so you can add tasks or runs
 incrementally. The auditor pass (`audit.json`) was run with Claude Code subagents on blinded
-copies of each run; [evals/ab/README.md](../evals/ab/README.md) describes how to repeat it. Raw transcripts are kept locally and not committed, since they contain local
-paths and session metadata.
+copies of each run; [evals/ab/README.md](../evals/ab/README.md) describes how to repeat it.
+
+**Install size:** The 48 run folders (14 MB with diffs and transcripts) are on the
+[`eval-results` branch](https://github.com/sarthakrastogi/ai-agent-engineer/tree/eval-results);
+`main` keeps only the summary tables. When users install the plugin, they get the full docs and
+skills (~1 MB) without the example runs. Raw transcripts are kept locally and not committed,
+since they contain local paths and session metadata.
 
 The pack also has a cheaper **routing eval** (`evals/run_routing.py`, 34 prompts) that checks
 whether each request loads the right skill, and 42 unit tests for the hooks (`python3 -m
