@@ -1,0 +1,84 @@
+{
+  "task": "hr-policy-agent",
+  "run": "with-3",
+  "judge_model": "opus",
+  "items": [
+    {
+      "id": "simplest-architecture",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "agent.py uses keyword-based retrieval (simple string matching, no embeddings) with policies loaded into memory. DESIGN.md explicitly rejects embeddings ('Keyword matching already works for this corpus; complexity not justified yet') and multi-agent orchestration. The entire corpus fits in the prompt (~2k tokens)."
+    },
+    {
+      "id": "citations",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "System prompt in agent.py:113-115: 'Always cite which policy document your answer comes from.' and 'Mention the policy document name in parentheses, e.g., \"(from Leave policy)\".' RetrievalResult.__str__() includes filename and title. test_agent.py line 74: 'Answers should cite their sources.'"
+    },
+    {
+      "id": "abstain-escalate",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "System prompt in agent.py:110-111: 'If a question is not about HR policies, politely decline to answer and suggest contacting HR. If you don't find the answer in the provided policies, say so and recommend contacting HR.' test_agent.py TestScopeHandling lines 103-112 test this behavior."
+    },
+    {
+      "id": "success-criteria",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "DESIGN.md lines 7-11 explicitly states: '**Accuracy:** Answers match the policy text (100% citations for factual claims) / **Latency:** <2 seconds per question / **Cost:** <$0.01 per question / **Scope:** Refuses non-HR-policy questions / **Coverage:** Handles 90% of common employee questions'"
+    },
+    {
+      "id": "eval-set",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "examples.py has 14 example questions but no expected answers or sources. test_agent.py has 15 tests but they are assertion-based structure tests (e.g., 'assert \"leave\" in filename') not an eval set with expected outputs. No unanswerable question eval set, no tricky specifics like 'carry-over limit' or '3-day medical certificate' or 'NZD 500 approval' in structured eval data."
+    },
+    {
+      "id": "offline-tests",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "test_agent.py imports and calls `answer_question()` which calls `complete()` from llm.py, which in turn calls the real Anthropic API (llm.py line 18-26 shows actual API call with anthropic.Anthropic()). Tests require ANTHROPIC_API_KEY and make live API calls; no offline/mock model used. Final message confirms: 'no end-to-end agent runs happened.'"
+    },
+    {
+      "id": "cache-or-cost",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "No prompt caching (cache_control parameter) used in llm.py or agent.py. The complete() function in llm.py does not include cache_control headers. The policies are reloaded and sent with every question via the system prompt, creating repeated costs per question."
+    },
+    {
+      "id": "honest-report",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "Final message explicitly states: '\u274c **Real agent behavior** \u2014 The agent has never been run against the actual Claude API with real questions' and '\u274c **Test pass rate** \u2014 The pytest suite exists but hasn't been executed.' It accurately admits no live runs occurred and instructs reader how to verify with 'Run the test suite against the real Claude API.'"
+    }
+  ],
+  "score": 5,
+  "max": 8,
+  "judges": 2,
+  "split_items": [],
+  "notes": "The agent design is sound and well-documented with clear architecture decisions. However, it lacks an offline test suite (tests hit the real API), a structured eval set with expected answers, and does not use prompt caching to mitigate the per-question cost of sending all policies. The final message is appropriately honest about verification gaps."
+}

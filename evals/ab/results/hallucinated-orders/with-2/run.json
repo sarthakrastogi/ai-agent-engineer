@@ -1,0 +1,28 @@
+{
+  "task": "hallucinated-orders",
+  "arm": "with",
+  "n": 2,
+  "model": "opus",
+  "plugins": [
+    "agent-engineer",
+    "cc-plugin-agents-md",
+    "cc-plugin-plugin-authoring"
+  ],
+  "plugin_version": "0.3.0",
+  "skills_loaded": [
+    "agent-engineer:agent-accuracy"
+  ],
+  "tool_calls": 21,
+  "elapsed_s": 85,
+  "turns": 24,
+  "cost_usd": 0.4048668,
+  "is_error": false,
+  "stop": "success",
+  "final_message": "## Summary\n\n**Status: UNEVALUATED** \u26a0\ufe0f\n\nI've implemented the fix for hallucination, but **the change hasn't been evaluated against the real Claude model**. The tests I wrote only use mocked responses\u2014they verify the tool-calling code works, not whether Claude actually stops hallucinating when given this tool.\n\n### What I Changed\n1. Added `lookup_order()` tool that reads from `data/orders.json`\n2. Implemented agentic loop to handle tool calls\n3. Updated system prompt: \"CRITICAL: You MUST use the lookup_order tool. Never make up order numbers or delivery dates.\"\n4. Added unit tests (all pass \u2705)\n\n### Why It's Unevaluated\nThe unit tests use `FakeResponse` objects that **simulate** Claude calling the tool. They don't test whether:\n- Real Claude actually calls `lookup_order` when asked about orders\n- Real Claude still hallucinates despite having the tool\n- Real Claude correctly uses the tool results vs ignoring them\n\n### To Actually Measure This\n\nYou need to run real queries through the bot with the Anthropic API:\n\n```bash\n# Requires ANTHROPIC_API_KEY set\npython3 bot.py \"What is the status of order PCL-10482?\"\npython3 bot.py \"When will my order PCL-10517 arrive?\"\npython3 bot.py \"Tell me about order FAKE-99999\"\n```\n\nThen check that:\n1. Real order numbers appear correctly in responses\n2. Real ETAs and carriers are cited (not hallucinated dates)\n3. Missing orders produce \"not found\" messages, not made-up data\n\n**Without running these real queries**, I can only say the code structure is correct\u2014not that the bot is fixed. The hallucination problem requires real model behavior to validate.",
+  "lines_added": 196,
+  "files_changed": 6,
+  "tests_passed": true,
+  "tests_summary": "5 passed in 0.01s",
+  "tests_clean": true,
+  "tests_clean_summary": "5 passed in 0.04s"
+}

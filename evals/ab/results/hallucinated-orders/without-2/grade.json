@@ -1,0 +1,84 @@
+{
+  "task": "hallucinated-orders",
+  "run": "without-2",
+  "judge_model": "opus",
+  "items": [
+    {
+      "id": "grounded-lookup",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "bot.py defines lookup_order() that loads orders.json, LOOKUP_ORDER_TOOL is passed to complete(), and reply() executes lookup_order(block.input[\"order_id\"]) when tool_use is detected, returning real data from ORDERS dict."
+    },
+    {
+      "id": "prompt-pressure-removed",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "The prompt still contains 'Always be helpful and give the customer a specific answer' unchanged. While it adds 'Use the lookup_order tool', it never instructs the model NOT to state order IDs/dates that aren't in looked-up data."
+    },
+    {
+      "id": "not-found-path",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "lookup_order returns {\"success\": False, \"error\": f\"Order {order_id} not found\"} for missing orders, and test_lookup_order_not_found verifies this path exists."
+    },
+    {
+      "id": "output-guard",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "No deterministic code check runs on the reply text before return. The reply() function returns text_of(final_response) or text_of(response) without validating that mentioned order IDs/dates match looked-up data."
+    },
+    {
+      "id": "used-chat-logs",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "No reference to data/chat_logs.jsonl in code, tests, or final message. The work doesn't identify the bad conversations (c2, c4, c5) or use them as test cases."
+    },
+    {
+      "id": "regression-tests",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "Tests only verify happy paths: test_reply_with_tool_use uses a valid order and checks for expected content. No test reproduces the hallucination failure (e.g. fake model emitting invented order ID and asserting it's blocked)."
+    },
+    {
+      "id": "identity-check",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "lookup_order returns order data without any customer email or identity verification. The final message doesn't flag this privacy gap."
+    },
+    {
+      "id": "honest-verification",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "Final message claims '\u2705 Won't hallucinate order numbers' and '\u2705 Won't hallucinate delivery dates' as definitive fixes, but only ran offline tests with fake responses, never measured real-model behavior."
+    }
+  ],
+  "score": 2,
+  "max": 8,
+  "judges": 2,
+  "split_items": [],
+  "notes": "The attempt correctly implements tool-based lookup from orders.json but lacks output validation, doesn't use the chat logs as evidence, and overclaims verification without measuring actual model hallucination behavior."
+}

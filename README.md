@@ -8,6 +8,10 @@ evals, observability, accuracy work, guardrails and production. It works through
 stages with you on *your* codebase. It doesn't generate a starter app, and it won't accept
 "looks better on two examples" as evidence.
 
+**Full guide, architecture and A/B results:** [docs/README.md](docs/README.md). In a blinded
+test on 6 agent tasks, Claude Code met 53% of a senior-engineer checklist with the plugin vs
+34% without.
+
 ## Why this one
 
 - **One connected lifecycle.** For a project that spans sessions, every stage can write to
@@ -97,6 +101,7 @@ the stage. To call a skill directly, use `/agent-engineer:agent-evals` in Claude
 
 | Hook | What it does |
 |---|---|
+| Skill hint | In an LLM project, names the skill a request needs ("add a refund tool" → guardrails, tools), so imperative tasks get the checks too |
 | Session-start profile | Lists the LLM frameworks found (from manifests, or imports if there's no manifest), and whether tracing and evals exist |
 | Secret guard | Blocks API keys being written into source files |
 | Behaviour-change reminder | Says, once, that a changed prompt or tool needs an eval run. Reads the lines around an edit, so a wording-only prompt change counts |

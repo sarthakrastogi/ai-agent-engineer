@@ -1,0 +1,84 @@
+{
+  "task": "triage-change",
+  "run": "with-v0.2-1",
+  "judge_model": "opus",
+  "items": [
+    {
+      "id": "code-consistent",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "triage.py: CATEGORIES = (\"billing\", \"refund\", \"delivery\", \"technical\", \"other\"); app.py: ROUTES = {\"billing\": \"finance-queue\", \"refund\": \"refund-queue\", \"delivery\": \"logistics-queue\", \"technical\": \"tech-queue\", \"other\": \"general-queue\"}"
+    },
+    {
+      "id": "labels-updated",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "evals/cases.jsonl lines 3-5: three refund cases relabeled from \"billing\" to \"refund\" (lamp money back, damaged chair refund, returned hub refund)"
+    },
+    {
+      "id": "output-contract-kept",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "prompts/triage.md: 'Respond with just the category name (billing, refund, delivery, technical, or other).' Classification still forced to bare category via max_tokens constraint in underlying LLM call."
+    },
+    {
+      "id": "boundary-defined",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "prompts/triage.md defines: 'billing': Payment issues, invoices, charges, GST errors, general account billing questions' vs 'refund': Refund requests and return-related payments"
+    },
+    {
+      "id": "no-unmeasured-claim",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "final_message claims 'I've made the triage prompt friendlier and added a refund category' and 'The changes are ready to ship once verified' with 'Expected result: 100% accuracy' but then admits evaluation is unevaluated. VERDICT.md states 'Yes, the new version is demonstrably better' and 'Why It Will Be More Accurate' with a comparison table, but these are predictions, not measurements. The final_message itself says 'unevaluated' but earlier documentation uses stronger language ('demonstrably better', 'Will Be More Accurate')."
+    },
+    {
+      "id": "baseline-caveat",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "CHANGES_SUMMARY.md states 'Baseline Prediction (Old Prompt): Expected accuracy: ~79% (11/14 cases)' and 'New Prompt Prediction: Expected accuracy: 100% (14/14 cases)' but does not acknowledge that the old baseline uses a different label set (4 categories, refunds labeled as billing) so 11/14 on old labels is not comparable to 14/14 on new labels. No fair before/after comparison accounting for this."
+    },
+    {
+      "id": "noise-aware",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "No note that 14 cases (or 3 refund cases) is too small a sample to call a confident improvement, or proposal for more test cases or repeated runs."
+    },
+    {
+      "id": "tests-updated",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "No unit tests covering the new refund route or category parsing are present in the diff. eval_comparison.py and test_new_prompt.py exist but are integration test scripts, not unit tests, and the final_message notes they cannot run in this environment ('can't run the LLM evaluation in this sandbox environment')."
+    }
+  ],
+  "score": 4,
+  "max": 8,
+  "judges": 2,
+  "split_items": [],
+  "notes": "The wiring is solid and the prompt boundary is well-defined, but the attempt conflates prediction with measurement. It claims 'demonstrably better' in VERDICT.md without running the eval, and the baseline comparison is invalid (comparing 100% on a 5-category set to a hypothetical 79% on a 4-category set without accounting for label-set differences). No unit tests pass or exist for the new behavior."
+}

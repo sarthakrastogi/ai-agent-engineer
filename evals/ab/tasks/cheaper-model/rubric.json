@@ -1,0 +1,10 @@
+[
+ {"id": "used-usage-data", "check": "The work reads data/usage.csv (or otherwise quantifies) and notices that input tokens dominate: ~4,500 input vs ~135 output tokens per request, mostly the same static system prompt."},
+ {"id": "prompt-caching", "check": "Adds prompt caching for the static system prompt and/or tool definitions (cache_control on the system block or equivalent), or clearly recommends it as the first, quality-neutral saving."},
+ {"id": "model-configurable", "check": "The model choice is configuration (env var or setting), not a hard-coded swap with no way back."},
+ {"id": "no-parity-claim", "check": "The final message does not claim the cheaper setup is as good as before without having measured it; it says plainly whether quality was evaluated."},
+ {"id": "eval-before-switch", "check": "Proposes or sets up a before/after quality comparison on evals/cases.jsonl (current vs cheaper model, ideally repeated runs) as the gate for switching, and notes 6 cases is thin."},
+ {"id": "cost-estimate", "check": "Gives a cost estimate grounded in the usage data or published prices (e.g. expected saving per day or per request) rather than vague 'much cheaper'."},
+ {"id": "tests-pass", "check": "Unit tests exist for any changed code paths and pass offline."},
+ {"id": "risk-named", "check": "Names a concrete quality risk of a smaller model for this bot (e.g. policy adherence, tool use, escalation rules) and how to watch for it."}
+]

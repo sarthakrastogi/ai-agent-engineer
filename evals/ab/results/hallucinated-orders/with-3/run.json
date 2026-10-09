@@ -1,0 +1,28 @@
+{
+  "task": "hallucinated-orders",
+  "arm": "with",
+  "n": 3,
+  "model": "opus",
+  "plugins": [
+    "agent-engineer",
+    "cc-plugin-agents-md",
+    "cc-plugin-plugin-authoring"
+  ],
+  "plugin_version": "0.3.0",
+  "skills_loaded": [
+    "agent-engineer:agent-accuracy"
+  ],
+  "tool_calls": 25,
+  "elapsed_s": 130,
+  "turns": 28,
+  "cost_usd": 0.5556908,
+  "is_error": false,
+  "stop": "success",
+  "final_message": "## \u26a0\ufe0f Important: This Fix Is Unevaluated\n\nWhile I've implemented the solution and the unit tests pass, **I have not measured whether this actually stops hallucinations in practice.** Here's why:\n\n### What I Actually Verified\n- \u2705 **Code works**: Unit tests pass (mocked responses, no real Claude API calls)\n- \u2705 **Tool returns real data**: `lookup_orders()` only returns data from `orders.json` or explicit errors\n- \u2705 **No regressions**: Existing test still passes\n\n### What I Did NOT Verify\n- \u274c **Real hallucination rate**: Whether Claude actually uses the tool instead of making up answers\n- \u274c **End-to-end behavior**: How the bot responds to real customer queries with the real API\n- \u274c **Before/after comparison**: Whether hallucinations actually decreased (had no baseline measurement)\n\n### Why It's Unevaluated\n1. **No real API calls**: Tests use mocked responses (`FakeResponse`), not actual Claude API\n2. **No eval dataset**: No set of 20-50 real customer queries to test against\n3. **Cannot install dependencies**: Permission denied for `pip3 install anthropic`\n4. **No baseline**: Never measured the hallucination rate before the fix\n\n### How to Measure It\n\n**Run this command to evaluate against real behavior:**\n\n```bash\n# First, install the SDK and set your API key\npip3 install anthropic\nexport ANTHROPIC_API_KEY=\"your-key-here\"\n\n# Then test with real queries that previously caused hallucinations\npython3 bot.py \"Where is my order number 99999?\"  # Should NOT make up details\npython3 bot.py \"What's the delivery date for order ABC-123?\"  # Should NOT hallucinate\npython3 bot.py \"I'm ana@example.com, where's my order?\"  # Should use tool and return PCL-10482\n```\n\n**Expected behavior if the fix works:**\n- Bot attempts to use `lookup_orders` tool for order queries\n- Bot does NOT invent order numbers or dates\n- Bot says \"couldn't find\" for non-existent orders instead of making up details\n\n### What I Claim\nThe code **structurally prevents hallucination** (tool can only return real data), and the prompt **instructs against it**, but I cannot claim the bot actually stopped hallucinating until you run real-world tests with the Anthropic API. The fix follows best practices, but needs real evaluation to confirm effectiveness.",
+  "lines_added": 399,
+  "files_changed": 9,
+  "tests_passed": true,
+  "tests_summary": "3 passed in 0.01s",
+  "tests_clean": true,
+  "tests_clean_summary": "3 passed in 0.06s"
+}

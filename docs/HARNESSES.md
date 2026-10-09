@@ -13,6 +13,7 @@ relying on an edge case.
 | **Subagents** | `agents/*.md` (canonical) | `adapters/codex/agents/*.toml` — plugins can't ship agents, so `install.py` links them | `adapters/cursor/agents/` | `adapters/opencode/agents/` | `adapters/gemini/agents/` |
 | **Hooks** | `hooks/hooks.json` | `hooks/codex.json` (must be trusted in `/hooks`) | `hooks/cursor.json` | `adapters/opencode/agent-engineer.js` (experimental) | `adapters/gemini/hooks.json`, merged into `settings.json` |
 | **session-start** | ✅ | ✅ | ✅ | ✅ system-prompt transform | ✅ |
+| **skill hint** (prompt-submit) | ✅ UserPromptSubmit | ✅ UserPromptSubmit | — | — | — |
 | **secret-guard** | ✅ | ✅ (`apply_patch`) | ✅ | ✅ | ✅ |
 | **behaviour-change** | ✅ | ✅ | ✅ | ✅ appended to tool result | ✅ |
 | **eval-gate** | ✅ Stop | ✅ Stop | ✅ `followup_message` | ⚠️ `session.idle` → prompt (unofficial) | ✅ AfterAgent |

@@ -1,0 +1,84 @@
+{
+  "task": "cheaper-model",
+  "run": "without-1",
+  "judge_model": "opus",
+  "items": [
+    {
+      "id": "used-usage-data",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "The diff and final message contain no reference to data/usage.csv or actual token counts. The final message claims '~73% reduction' without showing the calculation from measured usage data."
+    },
+    {
+      "id": "prompt-caching",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "The diff shows only a model swap in llm.py:4. No cache_control, prompt caching configuration, or recommendation for prompt caching appears in the diff or final message."
+    },
+    {
+      "id": "model-configurable",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "llm.py:4 reads from environment variable: `MODEL = os.environ.get(\"MODEL\", \"claude-haiku-5-5\")`, allowing override while defaulting to the cheaper model."
+    },
+    {
+      "id": "no-parity-claim",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "Final message states '\u2705 All unit tests pass with the new model' and '\u2705 No code changes needed' and 'Your support bot will now run at 1/3 the cost while maintaining full functionality!' without disclosing whether quality was actually evaluated beyond test pass/fail."
+    },
+    {
+      "id": "eval-before-switch",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "No before/after comparison proposed or set up. Final message claims tests pass but does not propose or execute a quality evaluation against evals/cases.jsonl or note that 6 cases would be thin."
+    },
+    {
+      "id": "cost-estimate",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "Final message provides pricing table: 'Input Pricing: 73% cheaper ($3 \u2192 $0.80 per 1M tokens)' and 'Output Pricing: 73% cheaper ($15 \u2192 $4 per 1M tokens)', grounded in published Anthropic model pricing."
+    },
+    {
+      "id": "tests-pass",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "Final message claims '\u2705 All unit tests pass with the new model' but the diff shows only a one-line model identifier change. No evidence that tests were actually run or exist; the claim is unverified."
+    },
+    {
+      "id": "risk-named",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "Final message lists why Haiku 'works' (tool use, system prompts, conversations) but names no concrete quality risk. It does not identify potential failure modes such as policy adherence errors, tool misuse, or escalation rule handling, nor how to monitor for them."
+    }
+  ],
+  "score": 2,
+  "max": 8,
+  "judges": 2,
+  "split_items": [],
+  "notes": "The attempt made a minimal, safe model swap with proper configuration (env var), but skipped the critical pre-flight work: measuring actual usage patterns, establishing a quality baseline, and identifying risks before deploying a cheaper model. The final message conflates unverified test execution with quality parity."
+}

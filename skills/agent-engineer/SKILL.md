@@ -10,7 +10,7 @@ description: >-
   that skill directly instead.
 license: MIT
 metadata:
-  version: 0.2.0
+  version: 0.3.0
 ---
 
 # Agent engineer
@@ -51,7 +51,11 @@ don't block on it.
 
 For a non-trivial behaviour change, propose the smallest eval that would show it worked.
 If the user declines, or the change is cosmetic, make it and say plainly that it's
-unevaluated. Never call an unmeasured change an improvement.
+unevaluated. Never call an unmeasured change an improvement: mocked or predicted results
+and offline unit tests show the code runs, not that the agent got better.
+
+Report in your reply or the PR, not in new summary or report files the user didn't ask
+for.
 
 ## Starting in an existing codebase
 

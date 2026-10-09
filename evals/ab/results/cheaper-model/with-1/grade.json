@@ -1,0 +1,84 @@
+{
+  "task": "cheaper-model",
+  "run": "with-1",
+  "judge_model": "opus",
+  "items": [
+    {
+      "id": "used-usage-data",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "The diff shows only a model name change in llm.py. No evidence in the diff or final message that data/usage.csv was read or analyzed. The final message does not quantify token usage."
+    },
+    {
+      "id": "prompt-caching",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "The diff shows no cache_control additions or prompt caching implementation. The final message mentions 'improve the system prompt' but does not recommend or implement prompt caching as a cost-neutral saving."
+    },
+    {
+      "id": "model-configurable",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "llm.py:4 shows `MODEL = os.environ.get(\"MODEL\", \"claude-haiku-5-5\")`, making the model configurable via environment variable with a fallback default."
+    },
+    {
+      "id": "no-parity-claim",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "Final message states: 'we haven't actually run the bot against the new model to verify it still works' and 'Don't roll it to production without running that eval first.' It plainly admits the cheaper setup is unevaluated rather than claiming parity."
+    },
+    {
+      "id": "eval-before-switch",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "Final message proposes: 'run: ANTHROPIC_API_KEY=<your-key> python evals/run_eval.py' to measure pass rate on the cheaper model, and acknowledges '6/6 pass rate' from the README, implying 6 cases is the test set. It notes comparison is needed before production switch."
+    },
+    {
+      "id": "cost-estimate",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "The final message says Haiku is 'cheaper' and mentions Sonnet is '~70% cheaper than Opus' but provides no grounded cost estimate for Haiku based on usage data or published prices (e.g., no per-request or per-day savings calculated)."
+    },
+    {
+      "id": "tests-pass",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "The diff shows no test changes. The final message states 'The Anthropic SDK isn't installed in this environment, so the eval couldn't execute' and no evidence that unit tests pass offline."
+    },
+    {
+      "id": "risk-named",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "The final message does not name concrete quality risks of Haiku for this specific bot (e.g., policy adherence, tool use, or escalation rules). It only suggests improving prompts and mentions fallback options without identifying what could fail."
+    }
+  ],
+  "score": 3,
+  "max": 8,
+  "judges": 2,
+  "split_items": [],
+  "notes": "The attempt made a superficial model swap without addressing the task properly. It skipped usage analysis, prompt caching (a quality-neutral cost win), cost estimation, concrete risk identification, and offline verification. While it correctly made the model configurable and honestly reported that evaluation is needed, the lack of data-driven analysis and preparatory work undermines the core task."
+}

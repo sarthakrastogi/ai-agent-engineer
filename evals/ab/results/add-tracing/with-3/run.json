@@ -1,0 +1,28 @@
+{
+  "task": "add-tracing",
+  "arm": "with",
+  "n": 3,
+  "model": "opus",
+  "plugins": [
+    "agent-engineer",
+    "cc-plugin-agents-md",
+    "cc-plugin-plugin-authoring"
+  ],
+  "plugin_version": "0.3.0",
+  "skills_loaded": [
+    "agent-engineer:agent-observability"
+  ],
+  "tool_calls": 20,
+  "elapsed_s": 198,
+  "turns": 23,
+  "cost_usd": 0.5637534,
+  "is_error": false,
+  "stop": "success",
+  "final_message": "I've added OpenTelemetry tracing to the inbox agent, but it hasn't been run yet. OpenTelemetry isn't installed here and I wasn't allowed to install it, so the new tests skip. The existing test still passes and the new files compile.\n\n**What a trace shows:** each email becomes one trace, readable in any OTLP backend such as Jaeger, Tempo, Honeycomb or Datadog.\n- **The email as a whole:** the prompt version and model, how many steps the loop took, why it stopped, whether it hit the 8-step limit, and how many replies were sent. Pass `thread_id=` to `handle_email` and emails from the same conversation are grouped together.\n- **Each model call:** tokens used (including cache), the stop reason and the response ID.\n- **Each tool call:** which tool ran and whether it failed. Before, a tool that returned an `{\"error\": ...}` was passed back to the model silently; now it's flagged as an error.\n\n**Flags worth alerting on:**\n- **Reply sent to someone other than the sender** (`app.reply.to_is_sender=false`). This is the important one. The agent reads untrusted emails and can send email to any address, so an email can tell it to send another customer's order details elsewhere. The flag makes that visible but doesn't block it; adding a check before `send_reply` sends anything is worth a separate change.\n- **No reply sent** (`app.replies_sent=0`): the customer never heard back.\n- **Step limit reached:** the trace is marked as an error.\n\n**Customer data:** by default traces don't include email bodies, email addresses, model text or tool inputs, because those contain personal data. Setting `INBOX_TRACE_CONTENT=1` records them. What to do in production is your call: keep it off, or turn it on behind something that redacts before export.\n\n**Files:**\n- `tracing.py` (new): setup, sending spans to `OTEL_EXPORTER_OTLP_ENDPOINT`.\n- `llm.py`: a span around each model call.\n- `agent.py`: the per-email and per-tool spans.\n- `tests/test_tracing.py` (new): checks the span tree and that customer data is absent by default, and feeds each flag a known-bad run.\n- `observability.md` (new): the attribute list, suggested alerts and sampling advice.\n- `requirements.txt` (new) and a line in `README.md`.\n\n**To finish:**\n1. Run `pip install -r requirements.txt && python -m pytest`.\n2. Call `tracing.init_tracing()` wherever the worker starts. I couldn't find that entry point in the repo.\n3. Send one real email and check the trace in your backend.\n\n**Caveats:**\n- `to_is_sender` assumes `sender` is a bare email address. If it's in `\"Name <addr>\"` form, parse out the address first or the flag will misfire.\n- The GenAI attribute names in OpenTelemetry are still experimental and may get renamed.\n\n---\n\n## Unevaluated\n\n**The tracing code hasn't been run against the real agent.** The span-tree test uses mocked Anthropic responses, so it verifies that the wrapper produces spans with the right shape and flags, but not that traces from real production emails are actually useful or that the agent still works correctly. To verify:\n\n```bash\npip install -r requirements.txt && python -m pytest tests/test_tracing.py\n```\n\nthen send a batch of representative customer emails through the instrumented agent and check the traces. The flags (`to_is_sender`, `result_anomalous`, `replies_sent=0`) need real bad emails to confirm they fire on actual problems and not just test fixtures.",
+  "lines_added": 303,
+  "files_changed": 12,
+  "tests_passed": true,
+  "tests_summary": "1 passed, 1 skipped in 0.01s",
+  "tests_clean": true,
+  "tests_clean_summary": "1 passed, 1 skipped in 0.08s"
+}

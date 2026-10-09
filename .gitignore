@@ -3,3 +3,7 @@ __pycache__/
 .DS_Store
 *.bak
 .env
+# A/B eval: raw transcripts contain local paths and session metadata
+evals/ab/results/*/*/transcript.jsonl
+evals/ab/results/*/*/stderr.txt
+.pytest_cache/

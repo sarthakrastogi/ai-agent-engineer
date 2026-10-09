@@ -1,0 +1,14 @@
+{"ticket": "I was charged twice for order PCL-10482", "label": "billing"}
+{"ticket": "My invoice shows the wrong GST number", "label": "billing"}
+{"ticket": "I want my money back for the broken lamp", "label": "refund"}
+{"ticket": "Please refund the chair, it arrived damaged", "label": "refund"}
+{"ticket": "Can I get a refund? I returned the hub last week", "label": "refund"}
+{"ticket": "Where is my parcel? It's 5 days late", "label": "delivery"}
+{"ticket": "Courier left my package at the wrong address", "label": "delivery"}
+{"ticket": "Can I change the delivery address for PCL-10517?", "label": "delivery"}
+{"ticket": "The app crashes when I open my orders page", "label": "technical"}
+{"ticket": "I can't reset my password, the link is expired", "label": "technical"}
+{"ticket": "Checkout button does nothing on Safari", "label": "technical"}
+{"ticket": "Do you have the desk lamp in black?", "label": "other"}
+{"ticket": "What are your store hours in Auckland?", "label": "other"}
+{"ticket": "I love the chair, thanks!", "label": "other"}

@@ -1,0 +1,6 @@
+{
+  "PCL-10482": {"customer_email": "ana@example.com", "status": "shipped", "carrier": "NZ Post", "eta": "2026-10-12", "items": ["Desk lamp"]},
+  "PCL-10517": {"customer_email": "ben@example.com", "status": "processing", "carrier": null, "eta": "2026-10-15", "items": ["Office chair"]},
+  "PCL-10533": {"customer_email": "chloe@example.com", "status": "delivered", "carrier": "CourierPost", "eta": "2026-10-03", "items": ["Monitor arm", "USB-C hub"]},
+  "PCL-10560": {"customer_email": "dev@example.com", "status": "cancelled", "carrier": null, "eta": null, "items": ["Standing mat"]}
+}

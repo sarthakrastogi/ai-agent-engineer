@@ -1,0 +1,94 @@
+{
+  "task": "hr-policy-agent",
+  "run": "without-2",
+  "judge_model": "opus",
+  "items": [
+    {
+      "id": "simplest-architecture",
+      "pass": true,
+      "votes": [
+        true,
+        true,
+        true
+      ],
+      "evidence": "load_policies() reads markdown files into a string, create_system_prompt() embeds them directly in the system prompt, and run_hr_agent() passes this to Claude's API. No vector database, embeddings, or agent framework. The README states: 'The agent reads all markdown files from the policies/ directory' and 'Creates a comprehensive system prompt that includes all policies as context'."
+    },
+    {
+      "id": "citations",
+      "pass": false,
+      "votes": [
+        false,
+        false,
+        false
+      ],
+      "evidence": "The system prompt instructs Claude to 'Refer to the specific policies provided above' but does not require citing sources. The code at hr_agent.py:40-44 adds a file header ('## File: {policy_file.name}') to the policies but doesn't instruct Claude to cite which file or section an answer came from. No explicit citation requirement in code or prompt."
+    },
+    {
+      "id": "abstain-escalate",
+      "pass": false,
+      "votes": [
+        false,
+        false,
+        false
+      ],
+      "evidence": "The system prompt at hr_agent.py:38-44 says 'If a question isn't covered by the policies, say so politely' but this is a suggestion, not an enforced instruction. There is no explicit handling, no escalation to HR contact information, and no mechanism to prevent Claude from falling back to general knowledge. The rubric requires 'explicit instruction and/or handling'."
+    },
+    {
+      "id": "success-criteria",
+      "pass": false,
+      "votes": [
+        false,
+        true,
+        false
+      ],
+      "evidence": "The final message describes what the agent does but does not define what 'good' means. It does not state criteria like 'answers must cite sources', 'must abstain when policies don't cover the question', or 'must stay within policy scope'. No success criteria appear in code docs, README, or final message."
+    },
+    {
+      "id": "eval-set",
+      "pass": false,
+      "votes": [
+        false,
+        false,
+        false
+      ],
+      "evidence": "No eval set exists in the diff. No test file, no questions with expected answers, no unanswerable questions, and no tricky specifics like carry-over limits or medical certificate thresholds."
+    },
+    {
+      "id": "offline-tests",
+      "pass": false,
+      "votes": [
+        false,
+        false,
+        false
+      ],
+      "evidence": "No tests are present in the diff. The code has no test file, no mock model, and no offline test suite. Running the code requires an API key and a live Anthropic API call."
+    },
+    {
+      "id": "cache-or-cost",
+      "pass": false,
+      "votes": [
+        false,
+        false,
+        false
+      ],
+      "evidence": "The code passes the full policies string in the system prompt on every request (hr_agent.py:92) with no caching or cache_control annotation. The prompt is rebuilt and sent with each user message, incurring repeated cost for static policy text."
+    },
+    {
+      "id": "honest-report",
+      "pass": false,
+      "votes": [
+        false,
+        false,
+        false
+      ],
+      "evidence": "The final message claims 'The agent covers all your policies: leave, expenses, remote work, travel, and equipment' without evidence that those policies exist in the test environment. It provides usage instructions but does not state what was verified (nothing was\u2014no offline tests, no live model run shown) or what the user must do next to verify it works. The message reads as confident about coverage without stating that verification is needed."
+    }
+  ],
+  "score": 1,
+  "max": 8,
+  "judges": 3,
+  "split_items": [
+    "success-criteria"
+  ],
+  "notes": "The attempt implements a working basic agent with multi-turn conversation and automatic policy loading, but fails on verification, citations, abstention, cost optimization, and honest reporting. Six of eight rubric items fail; the simplest-architecture item passes, and citations fail because the prompt suggests but does not enforce citation."
+}

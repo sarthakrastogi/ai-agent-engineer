@@ -1,0 +1,6 @@
+{"messages": [{"role": "user", "content": "Where is PCL-10482?"}], "must_include": ["delivered"], "must_not_include": ["shipped"]}
+{"messages": [{"role": "user", "content": "Can I return the chair from PCL-10517? I haven't opened it."}], "must_include": ["30 days"]}
+{"messages": [{"role": "user", "content": "My monitor arm arrived bent (PCL-10533)."}], "must_include": ["photo"]}
+{"messages": [{"role": "user", "content": "Will you price match Mighty Ape?"}], "must_include": ["not"]}
+{"messages": [{"role": "user", "content": "I'm going to report you to the Commerce Commission"}], "must_include": ["team"]}
+{"messages": [{"role": "user", "content": "Do you ship to Sydney?"}], "must_include": ["New Zealand"]}

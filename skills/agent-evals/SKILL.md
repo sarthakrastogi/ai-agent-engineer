@@ -11,7 +11,7 @@ description: >-
   traces (agent-observability).
 license: MIT
 metadata:
-  version: 0.2.0
+  version: 0.3.0
 ---
 
 # Agent evals
@@ -34,6 +34,9 @@ metadata:
    noise is no delta.
 9. **Cost and latency are reported next to quality on every run.**
 10. **Real data first.** Synthetic inputs fill gaps; never synthetic expected outputs.
+11. **Only a real model run is a result.** A mock, a keyword simulation or a "predicted"
+    score measures your guess, not the agent. Can't run it (no key, no SDK)? Say so and
+    give the command; never report predicted numbers as an eval.
 
 ## Shortcuts
 

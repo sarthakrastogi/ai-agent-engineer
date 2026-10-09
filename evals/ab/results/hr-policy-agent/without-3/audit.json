@@ -1,0 +1,41 @@
+{
+  "task": "hr-policy-agent",
+  "run": "without-3",
+  "grader": "blinded agentic audit (reads files, strict)",
+  "items": [
+    {
+      "id": "simplest-architecture",
+      "pass": true
+    },
+    {
+      "id": "citations",
+      "pass": false
+    },
+    {
+      "id": "abstain-escalate",
+      "pass": true
+    },
+    {
+      "id": "success-criteria",
+      "pass": false
+    },
+    {
+      "id": "eval-set",
+      "pass": false
+    },
+    {
+      "id": "offline-tests",
+      "pass": false
+    },
+    {
+      "id": "cache-or-cost",
+      "pass": false
+    },
+    {
+      "id": "honest-report",
+      "pass": false
+    }
+  ],
+  "score": 2,
+  "max": 8
+}

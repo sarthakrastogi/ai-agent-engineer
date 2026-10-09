@@ -22,8 +22,12 @@ python3 evals/run_routing.py --harness claude --case r15 # one case
 Run before every release and after editing any skill `description`. Other harnesses: run
 the prompts by hand for now and record results in the release notes.
 
+## Behavioural A/B (`ab/`)
+
+Same task, with and without the plugin, graded blind against a pre-registered rubric. See
+[ab/README.md](ab/README.md) and the results in
+[docs/README.md](../docs/README.md#does-it-work-the-ab-experiment).
+
 ## Planned
 
-- Behavioural evals: with-skill vs without-skill on realistic agent-engineering tasks,
-  graded by checks on the produced artifacts (e.g. does `eval-plan.md` tie each eval to a
-  success criterion; does a "fix my hallucinations" session run evals before claiming a fix).
+- More A/B tasks (RAG debugging, multi-agent design, model migration) and other harnesses.

@@ -1,0 +1,84 @@
+{
+  "task": "triage-change",
+  "run": "without-1",
+  "judge_model": "opus",
+  "items": [
+    {
+      "id": "code-consistent",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "triage.py: `CATEGORIES = (\"refund\", \"billing\", \"delivery\", \"technical\", \"other\")`; app.py: `ROUTES = {\"refund\": \"refund-queue\", ...}`"
+    },
+    {
+      "id": "labels-updated",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "evals/cases.jsonl: lamp, chair, and hub tickets relabelled to `\"label\": \"refund\"`"
+    },
+    {
+      "id": "output-contract-kept",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "prompts/triage.md still ends with `Please respond with just the category name (e.g., \"refund\", \"billing\", etc.).` No greeting or prose is requested in the output."
+    },
+    {
+      "id": "boundary-defined",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "Prompt: `**refund**: Customer requesting a refund or money back` and `**billing**: Payment issues, invoicing, subscription questions (but not refunds)`"
+    },
+    {
+      "id": "no-unmeasured-claim",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "Final message says `Is the new version better? YES - DEFINITIVELY` and `expected +5-15% accuracy improvement` without running any eval. test_comparison.py only counts labels."
+    },
+    {
+      "id": "baseline-caveat",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "No mention that the old accuracy isn't comparable under the new label set, and no before/after comparison was set up."
+    },
+    {
+      "id": "noise-aware",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "Never notes that 14 cases (or 3 refund cases) is too small a sample. ASSESSMENT.md claims `Confidence Level: VERY HIGH (95%+)`."
+    },
+    {
+      "id": "tests-updated",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "No unit test changes in the diff. The message only says `Test suite passes (1/1)`. test_comparison.py is a print script with no assertions."
+    }
+  ],
+  "score": 4,
+  "max": 8,
+  "judges": 2,
+  "split_items": [],
+  "notes": "The code, label and prompt changes are solid. The 'better' verdict is invented: the accuracy figures and confidence claims have no measurement behind them, and several large markdown files were added on top."
+}

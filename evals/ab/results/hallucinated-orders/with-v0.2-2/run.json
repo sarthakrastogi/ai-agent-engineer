@@ -1,0 +1,25 @@
+{
+  "task": "hallucinated-orders",
+  "arm": "with",
+  "n": 2,
+  "model": "opus",
+  "plugins": [
+    "agent-engineer",
+    "cc-plugin-agents-md",
+    "cc-plugin-plugin-authoring"
+  ],
+  "skills_loaded": [],
+  "tool_calls": 25,
+  "elapsed_s": 107,
+  "turns": 27,
+  "cost_usd": 0.5178294,
+  "is_error": false,
+  "stop": "success",
+  "final_message": "You're right to catch that! I edited the bot's behavior but didn't run a proper before/after eval on real production examples.\n\n## \u26a0\ufe0f Important: This Change Is Unevaluated\n\nWhile I:\n- \u2705 Added unit tests that pass\n- \u2705 Demonstrated the fix on the 3 hallucination cases from `chat_logs.jsonl`\n- \u2705 Added tools to prevent hallucinations\n\n**I did NOT:**\n- \u274c Run the full eval suite (if one exists)\n- \u274c Measure pass rate before/after on real customer queries\n- \u274c Test edge cases (partial order IDs, typos, ambiguous requests)\n- \u274c Verify latency/cost impact of tool calls\n\n### Why This Matters\nThe changes **should** fix hallucinations, but without running evals on a representative dataset, we don't know:\n1. **Pass rate improvement** - Does it actually work on diverse customer queries?\n2. **Regression risks** - Did we break anything that was working?\n3. **New failure modes** - What happens when the tool fails or returns unexpected data?\n\n### What You Should Do Next\n\n**Option 1: Run existing evals** (if you have them):\n```bash\n# Run your eval suite and compare before/after\npython -m pytest tests/  # or your eval command\n```\n\n**Option 2: Build an eval suite** (recommended):\nI can help you create one based on `chat_logs.jsonl` using the `/agent-evals` skill:\n- Extract the good (\ud83d\udc4d) and bad (\ud83d\udc4e) cases\n- Add edge cases (unknown orders, typos, multiple orders)\n- Measure hallucination rate, accuracy, CSAT correlation\n\n**Option 3: Manual testing** (minimum):\nTest the bot on these cases from your logs:\n```bash\npython3 bot.py \"where is my order PCL-10482?\"\npython3 bot.py \"I ordered a chair, my email is ben@example.com\"\npython3 bot.py \"Order PCL-10560 status?\"\n```\n\nWould you like me to build a proper eval suite to validate this fix? It would give you confidence before deploying to production.",
+  "lines_added": 429,
+  "files_changed": 8,
+  "tests_passed": true,
+  "tests_summary": "4 passed in 0.01s",
+  "tests_clean": true,
+  "tests_clean_summary": "4 passed in 0.04s"
+}

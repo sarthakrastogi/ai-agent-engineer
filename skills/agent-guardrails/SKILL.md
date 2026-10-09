@@ -10,7 +10,7 @@ description: >-
   belong to agent-tools; PII in traces to agent-observability.
 license: MIT
 metadata:
-  version: 0.2.0
+  version: 0.3.0
 ---
 
 # Agent guardrails

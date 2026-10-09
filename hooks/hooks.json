@@ -5,6 +5,9 @@
       {"matcher": "startup|resume|clear|compact",
        "hooks": [{"type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/ae_hook.py\" session-start --harness claude", "timeout": 10}]}
     ],
+    "UserPromptSubmit": [
+      {"hooks": [{"type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/ae_hook.py\" prompt-submit --harness claude", "timeout": 10}]}
+    ],
     "PreToolUse": [
       {"matcher": "Write|Edit|MultiEdit|NotebookEdit",
        "hooks": [{"type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/ae_hook.py\" pre-write --harness claude", "timeout": 10}]}

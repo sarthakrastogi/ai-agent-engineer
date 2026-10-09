@@ -11,7 +11,7 @@ description: >-
   or tool redesign (agent-tools).
 license: MIT
 metadata:
-  version: 0.2.0
+  version: 0.3.0
 ---
 
 # Agent accuracy
@@ -40,9 +40,10 @@ the cheapest change that works.
 
 ## Workflow
 
-1. **Intake.** Failing trace IDs, what correct looks like, how often. Read
-   `failure-taxonomy.md`, `eval-plan.md`, `experiment-log.md` (already tried). Ask what
-   "fixed" means and the cost/latency budget.
+1. **Intake.** Find the failures yourself before touching code: logged conversations,
+   traces or eval output in the repo (`logs/`, `data/`, `*.jsonl`) or the tracing backend.
+   Read the failing ones; they become the reproduction cases. Also read
+   `failure-taxonomy.md` and `experiment-log.md` if present, and state what "fixed" means.
 2. **Reproduce.** Each failure becomes an eval case (multi-turn → single turn or N-1).
    Run k times; record per-case pass rate.
 3. **Rule out the eval.** Is the reference, grader or task wrong?

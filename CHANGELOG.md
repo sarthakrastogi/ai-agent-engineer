@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.3.0 — unreleased
+
+From the first behavioural A/B (`evals/ab/`), where v0.2.0 scored the same as no plugin:
+- New `prompt-submit` hook (Claude Code, Codex): in an LLM project, names the agent-* skill(s)
+  a request needs ("add a tool that issues refunds" → `agent-guardrails`, `agent-tools`).
+  Skills loaded in only 4 of 12 imperative tasks without it.
+- Eval gate: running a script written this session no longer counts as running the evals;
+  the model was disarming the gate with its own mock "eval" that printed predicted scores.
+- Gate and reminder text: mocked, simulated or predicted results and offline unit tests
+  are named as non-evidence; evidence goes in the reply, not new files. The reminder no
+  longer asks for `experiment-log.md`, which drove report-file sprawl.
+- `agent-evals` rule 11 and the router's Evidence section: only a real model run is a
+  result; don't write summary files the user didn't ask for.
+- `evals/ab/`: the A/B harness, six tasks with pre-registered rubrics (two held out from
+  tuning), blinded grading and a report.
+- `agent-accuracy` intake: find and read logged failures in the repo before fixing. With the
+  skill hint, runs loaded the skill but skipped the chat logs that v0.2.0 runs had read
+  (unmeasured).
+- Results (blinded auditor grading, Claude Code + Opus 5.5): 53% vs 34% of the rubric with vs
+  without the plugin, +19 points (95% CI +14 to +25); +10 (+2 to +19) on held-out tasks.
+  See docs/README.md.
+
 ## 0.2.0 — unreleased
 
 Fixes:

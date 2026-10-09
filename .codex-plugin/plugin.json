@@ -1,6 +1,6 @@
 {
   "name": "agent-engineer",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A senior AI agent engineer for your coding agent: design, tools, prompting, context, RAG, evals, observability, accuracy, guardrails and production for LLM agents.",
   "keywords": [
     "agents",

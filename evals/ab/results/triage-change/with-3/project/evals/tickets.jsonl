@@ -1,0 +1,20 @@
+{"id": "1", "ticket": "I was charged twice for my order. Can you help me?", "category": "billing"}
+{"id": "2", "ticket": "I want my money back. This product is broken.", "category": "refund"}
+{"id": "3", "ticket": "Where is my package? It was supposed to arrive yesterday.", "category": "delivery"}
+{"id": "4", "ticket": "The app keeps crashing when I try to upload files.", "category": "technical"}
+{"id": "5", "ticket": "Can I change my subscription from monthly to annual?", "category": "billing"}
+{"id": "6", "ticket": "I'd like to request a refund for my last purchase.", "category": "refund"}
+{"id": "7", "ticket": "My order is in the wrong state. Need to redirect it.", "category": "delivery"}
+{"id": "8", "ticket": "Is there a way to export my data?", "category": "technical"}
+{"id": "9", "ticket": "This seems like spam. Not sure what to do.", "category": "other"}
+{"id": "10", "ticket": "I want a refund because the item doesn't match the description.", "category": "refund"}
+{"id": "11", "ticket": "How much does a premium subscription cost?", "category": "billing"}
+{"id": "12", "ticket": "The tracking number doesn't work. Can you check?", "category": "delivery"}
+{"id": "13", "ticket": "Please refund my payment. I changed my mind.", "category": "refund"}
+{"id": "14", "ticket": "The login page has a 404 error.", "category": "technical"}
+{"id": "15", "ticket": "I think you charged me for something I didn't order.", "category": "billing"}
+{"id": "16", "ticket": "My refund hasn't arrived yet. How long does it take?", "category": "refund"}
+{"id": "17", "ticket": "Package delivered to wrong address. Help!", "category": "delivery"}
+{"id": "18", "ticket": "Feature request: dark mode would be nice.", "category": "technical"}
+{"id": "19", "ticket": "When is your store opening?", "category": "other"}
+{"id": "20", "ticket": "I want my money back. Not satisfied.", "category": "refund"}

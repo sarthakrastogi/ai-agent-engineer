@@ -1,0 +1,627 @@
+{
+  "tasks": {
+    "add-tracing": {
+      "arms": {
+        "without": {
+          "n": 3,
+          "score_pct": 79.16666666666666,
+          "scores": [
+            "7/8",
+            "5/8",
+            "7/8"
+          ],
+          "tests_passed": 3,
+          "cost_usd": 0.2547376,
+          "elapsed_s": 98.66666666666667,
+          "turns": 15.666666666666666,
+          "lines_added": 165,
+          "new_md_files": 0,
+          "record_dir": 0,
+          "skills": []
+        },
+        "with": {
+          "n": 3,
+          "score_pct": 83.33333333333334,
+          "scores": [
+            "7/8",
+            "7/8",
+            "6/8"
+          ],
+          "tests_passed": 2,
+          "cost_usd": 0.47278966666666666,
+          "elapsed_s": 178.66666666666666,
+          "turns": 21.666666666666668,
+          "lines_added": 279.3333333333333,
+          "new_md_files": 0.3333333333333333,
+          "record_dir": 0,
+          "skills": [
+            "agent-observability"
+          ]
+        }
+      },
+      "items": {
+        "span-per-step": {
+          "without": 3,
+          "with": 3
+        },
+        "llm-metadata": {
+          "without": 2,
+          "with": 3
+        },
+        "tool-io-and-errors": {
+          "without": 3,
+          "with": 3
+        },
+        "pii-handling": {
+          "without": 3,
+          "with": 3
+        },
+        "standard-or-pluggable": {
+          "without": 2,
+          "with": 2
+        },
+        "trace-test": {
+          "without": 3,
+          "with": 1
+        },
+        "correlation-id": {
+          "without": 0,
+          "with": 3
+        },
+        "honest-report": {
+          "without": 3,
+          "with": 2
+        }
+      }
+    },
+    "cheaper-model": {
+      "arms": {
+        "without": {
+          "n": 3,
+          "score_pct": 25.0,
+          "scores": [
+            "2/8",
+            "2/8",
+            "2/8"
+          ],
+          "tests_passed": 3,
+          "cost_usd": 0.25155146666666667,
+          "elapsed_s": 60.666666666666664,
+          "turns": 29,
+          "lines_added": 1.6666666666666667,
+          "new_md_files": 0,
+          "record_dir": 0,
+          "skills": [
+            "claude-api"
+          ]
+        },
+        "with": {
+          "n": 3,
+          "score_pct": 41.66666666666667,
+          "scores": [
+            "3/8",
+            "3/8",
+            "4/8"
+          ],
+          "tests_passed": 2,
+          "cost_usd": 0.5086192666666668,
+          "elapsed_s": 115,
+          "turns": 38,
+          "lines_added": 316.3333333333333,
+          "new_md_files": 1.6666666666666667,
+          "record_dir": 0,
+          "skills": [
+            "agent-production",
+            "claude-api"
+          ]
+        }
+      },
+      "items": {
+        "used-usage-data": {
+          "without": 0,
+          "with": 1
+        },
+        "prompt-caching": {
+          "without": 0,
+          "with": 0
+        },
+        "model-configurable": {
+          "without": 3,
+          "with": 3
+        },
+        "no-parity-claim": {
+          "without": 0,
+          "with": 2
+        },
+        "eval-before-switch": {
+          "without": 0,
+          "with": 0
+        },
+        "cost-estimate": {
+          "without": 0,
+          "with": 1
+        },
+        "tests-pass": {
+          "without": 3,
+          "with": 2
+        },
+        "risk-named": {
+          "without": 0,
+          "with": 1
+        }
+      }
+    },
+    "hallucinated-orders": {
+      "arms": {
+        "without": {
+          "n": 3,
+          "score_pct": 16.666666666666664,
+          "scores": [
+            "1/8",
+            "1/8",
+            "2/8"
+          ],
+          "tests_passed": 3,
+          "cost_usd": 0.21288253333333332,
+          "elapsed_s": 55,
+          "turns": 18,
+          "lines_added": 222.33333333333334,
+          "new_md_files": 1,
+          "record_dir": 0,
+          "skills": []
+        },
+        "with-v0.2": {
+          "n": 3,
+          "score_pct": 54.166666666666664,
+          "scores": [
+            "6/8",
+            "4/8",
+            "3/8"
+          ],
+          "tests_passed": 3,
+          "cost_usd": 0.7759558666666665,
+          "elapsed_s": 212.66666666666666,
+          "turns": 23.666666666666668,
+          "lines_added": 840.6666666666666,
+          "new_md_files": 3.3333333333333335,
+          "record_dir": 2,
+          "skills": [
+            "agent-accuracy"
+          ]
+        },
+        "with": {
+          "n": 3,
+          "score_pct": 20.833333333333336,
+          "scores": [
+            "2/8",
+            "2/8",
+            "1/8"
+          ],
+          "tests_passed": 3,
+          "cost_usd": 0.4462688,
+          "elapsed_s": 104.66666666666667,
+          "turns": 24.333333333333332,
+          "lines_added": 246.66666666666666,
+          "new_md_files": 1.6666666666666667,
+          "record_dir": 0,
+          "skills": [
+            "agent-accuracy"
+          ]
+        }
+      },
+      "items": {
+        "grounded-lookup": {
+          "without": 3,
+          "with-v0.2": 3,
+          "with": 2
+        },
+        "prompt-pressure-removed": {
+          "without": 1,
+          "with-v0.2": 3,
+          "with": 2
+        },
+        "not-found-path": {
+          "without": 0,
+          "with-v0.2": 3,
+          "with": 1
+        },
+        "output-guard": {
+          "without": 0,
+          "with-v0.2": 0,
+          "with": 0
+        },
+        "used-chat-logs": {
+          "without": 0,
+          "with-v0.2": 2,
+          "with": 0
+        },
+        "regression-tests": {
+          "without": 0,
+          "with-v0.2": 1,
+          "with": 0
+        },
+        "identity-check": {
+          "without": 0,
+          "with-v0.2": 1,
+          "with": 0
+        },
+        "honest-verification": {
+          "without": 0,
+          "with-v0.2": 0,
+          "with": 0
+        }
+      }
+    },
+    "hr-policy-agent": {
+      "arms": {
+        "without": {
+          "n": 3,
+          "score_pct": 29.166666666666668,
+          "scores": [
+            "4/8",
+            "1/8",
+            "2/8"
+          ],
+          "tests_passed": 2,
+          "cost_usd": 0.6618204666666667,
+          "elapsed_s": 172.33333333333334,
+          "turns": 27.666666666666668,
+          "lines_added": 1663.6666666666667,
+          "new_md_files": 3.6666666666666665,
+          "record_dir": 0,
+          "skills": []
+        },
+        "with-v0.2": {
+          "n": 3,
+          "score_pct": 41.66666666666667,
+          "scores": [
+            "2/8",
+            "4/8",
+            "4/8"
+          ],
+          "tests_passed": 1,
+          "cost_usd": 1.1316993333333334,
+          "elapsed_s": 244.66666666666666,
+          "turns": 35,
+          "lines_added": 1526,
+          "new_md_files": 3.6666666666666665,
+          "record_dir": 0,
+          "skills": []
+        },
+        "with": {
+          "n": 3,
+          "score_pct": 62.5,
+          "scores": [
+            "4/8",
+            "6/8",
+            "5/8"
+          ],
+          "tests_passed": 0,
+          "cost_usd": 0.9396819333333334,
+          "elapsed_s": 238.66666666666666,
+          "turns": 34.333333333333336,
+          "lines_added": 1547,
+          "new_md_files": 5,
+          "record_dir": 0,
+          "skills": [
+            "agent-design",
+            "agent-rag"
+          ]
+        }
+      },
+      "items": {
+        "simplest-architecture": {
+          "without": 3,
+          "with-v0.2": 2,
+          "with": 3
+        },
+        "citations": {
+          "without": 1,
+          "with-v0.2": 3,
+          "with": 3
+        },
+        "abstain-escalate": {
+          "without": 1,
+          "with-v0.2": 2,
+          "with": 3
+        },
+        "success-criteria": {
+          "without": 1,
+          "with-v0.2": 0,
+          "with": 3
+        },
+        "eval-set": {
+          "without": 0,
+          "with-v0.2": 0,
+          "with": 0
+        },
+        "offline-tests": {
+          "without": 1,
+          "with-v0.2": 0,
+          "with": 0
+        },
+        "cache-or-cost": {
+          "without": 0,
+          "with-v0.2": 0,
+          "with": 1
+        },
+        "honest-report": {
+          "without": 0,
+          "with-v0.2": 3,
+          "with": 2
+        }
+      }
+    },
+    "refund-tool": {
+      "arms": {
+        "without": {
+          "n": 3,
+          "score_pct": 3.7037037037037033,
+          "scores": [
+            "0/9",
+            "1/9",
+            "0/9"
+          ],
+          "tests_passed": 3,
+          "cost_usd": 0.18971739999999998,
+          "elapsed_s": 67.66666666666667,
+          "turns": 18,
+          "lines_added": 62.666666666666664,
+          "new_md_files": 0.3333333333333333,
+          "record_dir": 0,
+          "skills": []
+        },
+        "with-v0.2": {
+          "n": 3,
+          "score_pct": 11.11111111111111,
+          "scores": [
+            "0/9",
+            "1/9",
+            "2/9"
+          ],
+          "tests_passed": 3,
+          "cost_usd": 0.27338219999999996,
+          "elapsed_s": 88.33333333333333,
+          "turns": 24,
+          "lines_added": 34.333333333333336,
+          "new_md_files": 0,
+          "record_dir": 0,
+          "skills": []
+        },
+        "with": {
+          "n": 3,
+          "score_pct": 44.44444444444444,
+          "scores": [
+            "4/9",
+            "4/9",
+            "4/9"
+          ],
+          "tests_passed": 3,
+          "cost_usd": 0.5212217333333333,
+          "elapsed_s": 217.33333333333334,
+          "turns": 29.666666666666668,
+          "lines_added": 586.6666666666666,
+          "new_md_files": 1.6666666666666667,
+          "record_dir": 0,
+          "skills": [
+            "agent-guardrails",
+            "agent-tools"
+          ]
+        }
+      },
+      "items": {
+        "amount-bounded": {
+          "without": 0,
+          "with-v0.2": 0,
+          "with": 3
+        },
+        "ownership-in-code": {
+          "without": 0,
+          "with-v0.2": 0,
+          "with": 0
+        },
+        "approval-or-cap": {
+          "without": 0,
+          "with-v0.2": 0,
+          "with": 1
+        },
+        "idempotent": {
+          "without": 1,
+          "with-v0.2": 1,
+          "with": 2
+        },
+        "injection-aware": {
+          "without": 0,
+          "with-v0.2": 0,
+          "with": 0
+        },
+        "eligibility": {
+          "without": 0,
+          "with-v0.2": 0,
+          "with": 0
+        },
+        "audit-trail": {
+          "without": 0,
+          "with-v0.2": 0,
+          "with": 0
+        },
+        "guard-tests": {
+          "without": 0,
+          "with-v0.2": 0,
+          "with": 3
+        },
+        "honest-report": {
+          "without": 0,
+          "with-v0.2": 2,
+          "with": 3
+        }
+      }
+    },
+    "triage-change": {
+      "arms": {
+        "without": {
+          "n": 3,
+          "score_pct": 50.0,
+          "scores": [
+            "4/8",
+            "4/8",
+            "4/8"
+          ],
+          "tests_passed": 2,
+          "cost_usd": 0.32743293333333334,
+          "elapsed_s": 79,
+          "turns": 29.666666666666668,
+          "lines_added": 188.33333333333334,
+          "new_md_files": 1,
+          "record_dir": 0,
+          "skills": []
+        },
+        "with-v0.2": {
+          "n": 3,
+          "score_pct": 50.0,
+          "scores": [
+            "3/8",
+            "4/8",
+            "5/8"
+          ],
+          "tests_passed": 2,
+          "cost_usd": 0.8233102666666666,
+          "elapsed_s": 230.66666666666666,
+          "turns": 24.666666666666668,
+          "lines_added": 816.3333333333334,
+          "new_md_files": 4,
+          "record_dir": 2,
+          "skills": [
+            "agent-accuracy",
+            "agent-evals"
+          ]
+        },
+        "with": {
+          "n": 3,
+          "score_pct": 66.66666666666666,
+          "scores": [
+            "7/8",
+            "5/8",
+            "4/8"
+          ],
+          "tests_passed": 3,
+          "cost_usd": 0.5290944666666667,
+          "elapsed_s": 141.33333333333334,
+          "turns": 21.666666666666668,
+          "lines_added": 144,
+          "new_md_files": 0.6666666666666666,
+          "record_dir": 0,
+          "skills": [
+            "agent-evals",
+            "agent-prompting"
+          ]
+        }
+      },
+      "items": {
+        "code-consistent": {
+          "without": 3,
+          "with-v0.2": 2,
+          "with": 3
+        },
+        "labels-updated": {
+          "without": 3,
+          "with-v0.2": 3,
+          "with": 2
+        },
+        "output-contract-kept": {
+          "without": 3,
+          "with-v0.2": 3,
+          "with": 3
+        },
+        "boundary-defined": {
+          "without": 3,
+          "with-v0.2": 2,
+          "with": 3
+        },
+        "no-unmeasured-claim": {
+          "without": 0,
+          "with-v0.2": 0,
+          "with": 2
+        },
+        "baseline-caveat": {
+          "without": 0,
+          "with-v0.2": 1,
+          "with": 0
+        },
+        "noise-aware": {
+          "without": 0,
+          "with-v0.2": 1,
+          "with": 1
+        },
+        "tests-updated": {
+          "without": 0,
+          "with-v0.2": 0,
+          "with": 2
+        }
+      }
+    }
+  },
+  "overall": {
+    "without": {
+      "n": 18,
+      "score_pct": 33.95061728395062,
+      "tests_passed": 16,
+      "cost_usd": 0.3163570666666667,
+      "elapsed_s": 88.88888888888889,
+      "turns": 23,
+      "new_md_files": 1
+    },
+    "with-v0.2": {
+      "n": 12,
+      "score_pct": 39.23611111111111,
+      "tests_passed": 9,
+      "cost_usd": 0.7510869166666666,
+      "elapsed_s": 194.08333333333334,
+      "turns": 26.833333333333332,
+      "new_md_files": 2.75
+    },
+    "with": {
+      "n": 18,
+      "score_pct": 53.24074074074075,
+      "tests_passed": 13,
+      "cost_usd": 0.5696126444444445,
+      "elapsed_s": 165.94444444444446,
+      "turns": 28.27777777777778,
+      "new_md_files": 1.8333333333333333
+    }
+  },
+  "comparisons": {
+    "with-v0.2": {
+      "tasks": [
+        "hallucinated-orders",
+        "hr-policy-agent",
+        "refund-tool",
+        "triage-change"
+      ],
+      "arm_pct": 39.23611111111111,
+      "without_pct": 24.88425925925926,
+      "diff_pct_points": 14.351851851851848,
+      "diff_ci95": [
+        6.018518518518518,
+        22.569444444444446
+      ]
+    },
+    "with": {
+      "tasks": [
+        "add-tracing",
+        "cheaper-model",
+        "hallucinated-orders",
+        "hr-policy-agent",
+        "refund-tool",
+        "triage-change"
+      ],
+      "arm_pct": 53.24074074074075,
+      "without_pct": 33.95061728395062,
+      "diff_pct_points": 19.290123456790127,
+      "diff_ci95": [
+        13.734567901234568,
+        24.845679012345677
+      ]
+    }
+  }
+}

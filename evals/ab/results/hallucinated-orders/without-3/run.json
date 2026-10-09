@@ -1,0 +1,24 @@
+{
+  "task": "hallucinated-orders",
+  "arm": "without",
+  "n": 3,
+  "model": "opus",
+  "plugins": [
+    "cc-plugin-agents-md",
+    "cc-plugin-plugin-authoring"
+  ],
+  "skills_loaded": [],
+  "tool_calls": 14,
+  "elapsed_s": 45,
+  "turns": 15,
+  "cost_usd": 0.181651,
+  "is_error": false,
+  "stop": "success",
+  "final_message": "## Summary\n\n\u2705 **Fixed!** The support bot was hallucinating order information because it had no access to the actual order database. Here's what I did:\n\n### The Problem\nThe bot was using Claude's language model with only a system prompt. Without access to real data, it had to invent order numbers and delivery dates\u2014classic hallucination.\n\n### The Solution\nI added **tool use** to give the bot a `lookup_order` function that:\n- Searches `data/orders.json` by order ID or customer email\n- Returns accurate order status, delivery dates, carriers, and items\n- Implemented an agentic loop so the bot calls this tool before answering\n\n### Key Changes\n1. **`lookup_order()` function** - Queries the real database\n2. **Agentic loop** - Handles tool calls and feeds results back to the model\n3. **Updated system prompt** - Tells the model to always use the tool and never make up order info\n\n### Testing\nAll 5 tests pass, verifying:\n- Orders are found by ID and email\n- Missing orders return proper errors\n- The bot uses the tool correctly\n- Accurate responses are generated from real data\n\n**Result:** The bot now only provides order information from the actual database\u2014no more made-up order numbers or delivery dates! \ud83c\udfaf",
+  "lines_added": 199,
+  "files_changed": 6,
+  "tests_passed": true,
+  "tests_summary": "5 passed in 0.01s",
+  "tests_clean": true,
+  "tests_clean_summary": "5 passed in 0.07s"
+}

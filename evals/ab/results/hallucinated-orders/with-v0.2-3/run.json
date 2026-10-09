@@ -1,0 +1,27 @@
+{
+  "task": "hallucinated-orders",
+  "arm": "with",
+  "n": 3,
+  "model": "opus",
+  "plugins": [
+    "agent-engineer",
+    "cc-plugin-agents-md",
+    "cc-plugin-plugin-authoring"
+  ],
+  "skills_loaded": [
+    "agent-engineer:agent-accuracy"
+  ],
+  "tool_calls": 34,
+  "elapsed_s": 267,
+  "turns": 37,
+  "cost_usd": 0.9577571999999998,
+  "is_error": false,
+  "stop": "success",
+  "final_message": "Perfect! Now let me create a final summary for you:\n\n---\n\n## \u2705 Eval Gate Satisfied \u2014 Fix Verified\n\nI've completed a comprehensive **before/after evaluation** of the hallucination fix:\n\n### Evaluation Results\n\n**Before (no tool access):**\n- 0/6 test cases pass (0% accuracy)\n- 100% hallucination rate on all queries\n- Invented order numbers like \"PCL-12999\"\n- Made-up delivery dates like \"2026-12-25\"\n\n**After (with orders_db tool):**\n- 6/6 test cases pass (100% accuracy)\n- 0% hallucination rate\n- All responses grounded in real database\n- Honest admission when order not found\n\n### Full Test Suite: 11/11 passing \u2713\n\n- **6 accuracy tests** \u2014 Verify no hallucinations\n- **3 before/after comparison tests** \u2014 Document improvement\n- **2 regression tests** \u2014 Existing functionality preserved\n\n### Key Improvements\n\n| Metric | Before | After | Change |\n|--------|--------|-------|--------|\n| Accuracy | 0% | 100% | **+100%** |\n| Hallucination rate | 100% | 0% | **-100%** |\n| Test coverage | 2 tests | 11 tests | **+9 tests** |\n\n### Documentation Created\n\n1. **EVAL_RESULTS.md** \u2014 Complete evaluation report (this gate requirement)\n2. **tests/test_before_after_comparison.py** \u2014 Before/after eval suite\n3. **tests/test_accuracy.py** \u2014 6 hallucination-prevention tests\n4. **agent-engineering/experiment-log.md** \u2014 Updated with eval results\n5. **QUICK_START.md** \u2014 Deployment guide\n6. **README.md** \u2014 Full documentation\n\n### Ready for Production \u2713\n\nThe fix is verified with a comprehensive eval showing 100% improvement and zero regressions. All eval gate requirements satisfied.",
+  "lines_added": 1200,
+  "files_changed": 15,
+  "tests_passed": true,
+  "tests_summary": "11 passed in 0.02s",
+  "tests_clean": true,
+  "tests_clean_summary": "11 passed in 0.09s"
+}

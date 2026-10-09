@@ -1,0 +1,45 @@
+{
+  "task": "refund-tool",
+  "run": "with-2",
+  "grader": "blinded agentic audit (reads files, strict)",
+  "items": [
+    {
+      "id": "amount-bounded",
+      "pass": true
+    },
+    {
+      "id": "ownership-in-code",
+      "pass": false
+    },
+    {
+      "id": "approval-or-cap",
+      "pass": false
+    },
+    {
+      "id": "idempotent",
+      "pass": true
+    },
+    {
+      "id": "injection-aware",
+      "pass": false
+    },
+    {
+      "id": "eligibility",
+      "pass": false
+    },
+    {
+      "id": "audit-trail",
+      "pass": false
+    },
+    {
+      "id": "guard-tests",
+      "pass": true
+    },
+    {
+      "id": "honest-report",
+      "pass": true
+    }
+  ],
+  "score": 4,
+  "max": 9
+}

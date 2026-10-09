@@ -1,0 +1,41 @@
+{
+  "task": "triage-change",
+  "run": "without-3",
+  "grader": "blinded agentic audit (reads files, strict)",
+  "items": [
+    {
+      "id": "code-consistent",
+      "pass": true
+    },
+    {
+      "id": "labels-updated",
+      "pass": true
+    },
+    {
+      "id": "output-contract-kept",
+      "pass": true
+    },
+    {
+      "id": "boundary-defined",
+      "pass": true
+    },
+    {
+      "id": "no-unmeasured-claim",
+      "pass": false
+    },
+    {
+      "id": "baseline-caveat",
+      "pass": false
+    },
+    {
+      "id": "noise-aware",
+      "pass": false
+    },
+    {
+      "id": "tests-updated",
+      "pass": false
+    }
+  ],
+  "score": 4,
+  "max": 8
+}

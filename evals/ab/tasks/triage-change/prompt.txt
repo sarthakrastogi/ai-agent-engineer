@@ -1,0 +1,1 @@
+Make the triage prompt friendlier, and give refund requests their own category (right now they land in billing). Then tell me whether the new version is better.

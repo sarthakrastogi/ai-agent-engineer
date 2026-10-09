@@ -1,0 +1,41 @@
+{
+  "task": "add-tracing",
+  "run": "without-3",
+  "grader": "blinded agentic audit (reads files, strict)",
+  "items": [
+    {
+      "id": "span-per-step",
+      "pass": true
+    },
+    {
+      "id": "llm-metadata",
+      "pass": true
+    },
+    {
+      "id": "tool-io-and-errors",
+      "pass": true
+    },
+    {
+      "id": "pii-handling",
+      "pass": true
+    },
+    {
+      "id": "standard-or-pluggable",
+      "pass": true
+    },
+    {
+      "id": "trace-test",
+      "pass": true
+    },
+    {
+      "id": "correlation-id",
+      "pass": false
+    },
+    {
+      "id": "honest-report",
+      "pass": true
+    }
+  ],
+  "score": 7,
+  "max": 8
+}

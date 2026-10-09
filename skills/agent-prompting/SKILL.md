@@ -11,7 +11,7 @@ description: >-
   migration process (agent-production).
 license: MIT
 metadata:
-  version: 0.2.0
+  version: 0.3.0
 ---
 
 # Agent prompting

@@ -169,6 +169,67 @@ class EvalGate(unittest.TestCase):
         self.assertIsNone(run("stop", {"session_id": self.sid, "stop_hook_active": True}))
 
 
+class PromptSubmit(unittest.TestCase):
+    def setUp(self):
+        self.sid = f"test-{uuid.uuid4()}"
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self.tmp.name)
+
+    def tearDown(self):
+        ae_hook.state_path(self.sid).unlink(missing_ok=True)
+        self.tmp.cleanup()
+
+    def submit(self, prompt):
+        out = run("prompt-submit", {"session_id": self.sid, "cwd": str(self.root),
+                                    "prompt": prompt})
+        return out["hookSpecificOutput"]["additionalContext"] if out else None
+
+    def test_names_skills_in_llm_project_once(self):
+        (self.root / "requirements.txt").write_text("anthropic\n")
+        ctx = self.submit("Add a tool so the agent can issue refunds from the email")
+        self.assertIn("`agent-guardrails`", ctx)
+        self.assertIn("`agent-tools`", ctx)
+        self.assertIsNone(self.submit("Also add a tool for order lookup"))  # already hinted
+
+    def test_silent_outside_llm_projects_and_for_ordinary_edits(self):
+        self.assertIsNone(self.submit("Add a tool so the agent can issue refunds"))
+        (self.root / "requirements.txt").write_text("anthropic\n")
+        for prompt in ("Rename resp to response in agent.py", "Bump langchain",
+                       "The unit test in tools/dates.py fails with a timezone error"):
+            with self.subTest(prompt=prompt):
+                self.assertIsNone(self.submit(prompt))
+
+    def test_new_category_is_not_a_payments_power(self):
+        self.assertNotIn("agent-guardrails", ae_hook.skills_for(
+            "Give refund requests their own category in the triage prompt"))
+
+
+class OwnScriptsDontCount(unittest.TestCase):
+    def setUp(self):
+        self.sid = f"test-{uuid.uuid4()}"
+
+    def tearDown(self):
+        ae_hook.state_path(self.sid).unlink(missing_ok=True)
+
+    def test_running_a_mock_eval_you_just_wrote_keeps_the_gate(self):
+        run("post-write", {"session_id": self.sid, "tool_input": {
+            "file_path": "prompts/triage.md", "content": "Be friendlier."}})
+        run("post-write", {"session_id": self.sid, "tool_input": {
+            "file_path": "/w/evals/mock_eval.py", "content": "print('predicted 14/14')"}})
+        run("post-bash", {"session_id": self.sid, "cwd": "/w",
+                          "tool_input": {"command": "python3 evals/mock_eval.py"}})
+        stop = run("stop", {"session_id": self.sid})
+        self.assertEqual(stop["decision"], "block")
+        self.assertIn("predicted", stop["reason"])
+
+    def test_running_the_existing_suite_clears_the_gate(self):
+        run("post-write", {"session_id": self.sid, "tool_input": {
+            "file_path": "prompts/triage.md", "content": "Be friendlier."}})
+        run("post-bash", {"session_id": self.sid,
+                          "tool_input": {"command": "python3 evals/run_eval.py"}})
+        self.assertIsNone(run("stop", {"session_id": self.sid}))
+
+
 class Robustness(unittest.TestCase):
     def test_garbage_input_fails_open(self):
         proc = subprocess.run([sys.executable, str(HOOK), "stop"], input="not json",

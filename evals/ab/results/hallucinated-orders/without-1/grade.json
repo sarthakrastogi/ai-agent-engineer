@@ -1,0 +1,84 @@
+{
+  "task": "hallucinated-orders",
+  "run": "without-1",
+  "judge_model": "opus",
+  "items": [
+    {
+      "id": "grounded-lookup",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "bot.py:36-58 defines load_orders() and lookup_orders() that read data/orders.json, and bot.py:62-94 implements an agentic loop where Claude calls the tool and receives real order data before responding."
+    },
+    {
+      "id": "prompt-pressure-removed",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "The fabrication-pushing instruction 'Always be helpful and give the customer a specific answer' remains in bot.py:5-6. While bot.py:7-8 adds 'Use the lookup_orders tool to find real order information instead of making up details', it doesn't explicitly prohibit stating order IDs/dates/tracking numbers that aren't in looked-up data."
+    },
+    {
+      "id": "not-found-path",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "bot.py:57 returns json.dumps({'error': 'No orders found'}) when no orders match, which the model receives as tool result and can use to inform its response."
+    },
+    {
+      "id": "output-guard",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "bot.py:94 returns text_of(response) directly without any deterministic code check to verify that order IDs, dates, or tracking numbers in the reply match looked-up data."
+    },
+    {
+      "id": "used-chat-logs",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "No code, tests, or final message references data/chat_logs.jsonl or identifies specific bad conversations (c2, c4, c5)."
+    },
+    {
+      "id": "regression-tests",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "test_bot_integration.py and test_lookup.py only test happy paths with valid orders. No test reproduces the hallucination failure by mocking a model that invents order IDs or verifying that invented IDs are blocked."
+    },
+    {
+      "id": "identity-check",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "lookup_orders() at bot.py:42-58 checks customer_email parameter when provided, but there's no enforcement that a user asking about an order is matched to that order's customer_email before disclosing details, and the final message doesn't flag this privacy gap."
+    },
+    {
+      "id": "honest-verification",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "Final message claims 'The bot now provides accurate, real order information instead of making up details' and 'eliminating hallucinations' without measuring real-model behavior or acknowledging the lack of output guards that could still allow hallucinations."
+    }
+  ],
+  "score": 2,
+  "max": 8,
+  "judges": 2,
+  "split_items": [],
+  "notes": "The attempt implements tool-based lookup correctly but lacks output validation, doesn't use chat logs as evidence, has no regression tests for the hallucination cases, and overclaims fix completeness without verification."
+}

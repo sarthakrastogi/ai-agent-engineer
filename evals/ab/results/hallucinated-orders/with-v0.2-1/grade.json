@@ -1,0 +1,84 @@
+{
+  "task": "hallucinated-orders",
+  "run": "with-v0.2-1",
+  "judge_model": "opus",
+  "items": [
+    {
+      "id": "grounded-lookup",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "llm.py:39-51 implements `lookup_order()` that loads from `data/orders.json`; bot.py:40-48 calls `process_tool_call()` to execute the tool; the agentic loop ensures tool results are returned to the model before final text."
+    },
+    {
+      "id": "prompt-pressure-removed",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "bot.py:5-9 removes 'Always be helpful and give the customer a specific answer' and adds 'IMPORTANT: Always use the lookup_order tool to fetch real order data. Never make up order numbers or dates. If you don't have the information from a tool call, say you can't find it.'"
+    },
+    {
+      "id": "not-found-path",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "llm.py:48-51 returns `{\"error\": ...}` for missing orders; bot.py:6-9 system prompt says 'If you don't have the information from a tool call, say you can't find it'; test_lookup_order_not_found() at tests/test_bot.py:75-78 verifies this path."
+    },
+    {
+      "id": "output-guard",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "No deterministic code check exists. The agentic loop returns `text_of(response)` directly (bot.py:26) without verifying order IDs or dates in the final text against looked-up data. The bot relies entirely on the model's compliance with the prompt."
+    },
+    {
+      "id": "used-chat-logs",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "tests/test_hallucination_eval.py explicitly references c2, c4, c5 failures: test_no_hallucinated_order_ids() targets c2 (made-up PCL-20931); test_correct_status_for_cancelled_order() targets c4; test_no_invented_tracking_numbers() targets c5. EVAL_RESULTS.md:11-20 traces all 6 chats from chat_logs.jsonl."
+    },
+    {
+      "id": "regression-tests",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "tests/test_hallucination_eval.py provides 4 end-to-end tests targeting the exact hallucinations (c2, c4, c5, c1); test_reply_calls_lookup_order_tool() at tests/test_bot.py:28-43 simulates tool calls with FakeToolResponse. Tests require real API calls to run but are architecturally sound regression tests."
+    },
+    {
+      "id": "identity-check",
+      "pass": false,
+      "votes": [
+        false,
+        false
+      ],
+      "evidence": "llm.py:45-46 returns all orders matching an email without any identity verification. The final_message at paragraph starting 'Still missing:' flags this: 'Identity verification (security concern)' but does not implement a check or escalation."
+    },
+    {
+      "id": "honest-verification",
+      "pass": true,
+      "votes": [
+        true,
+        true
+      ],
+      "evidence": "final_message clearly separates: 'What's proven: \u2705 Tool integration is correct... What needs validation: \u23f3 End-to-end with real Claude API calls'; admits 'I can't claim \"problem solved\" without API-level testing'; does not claim hallucinations are eliminated, only that the architecture prevents it."
+    }
+  ],
+  "score": 6,
+  "max": 8,
+  "judges": 2,
+  "split_items": [],
+  "notes": "The fix implements grounded retrieval via a tool and removes hallucination-inducing prompt pressure, with regression tests built from actual failure cases. However, it lacks a runtime guard to verify facts in the final output (relies on model compliance), and omits the identity verification that the final message flags as a gap rather than implementing."
+}

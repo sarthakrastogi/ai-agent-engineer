@@ -1,0 +1,62 @@
+HR Policy Agent Project Structure
+==================================
+
+.
+├── agent.py                    Main agent implementation with agentic loop
+├── llm.py                      Anthropic API wrapper (existing)
+├── demo.py                     Demo script with example questions
+├── test_agent.py               Test suite (all tests pass ✓)
+├── api_example.py              Optional FastAPI wrapper for web service
+├── README.md                   Setup and usage instructions
+├── IMPLEMENTATION.md           Architecture and design details
+├── PROJECT_STRUCTURE.txt       This file
+│
+└── policies/                   HR policy documents
+    ├── leave.md                Annual, sick, and parental leave policy
+    ├── remote-work.md          Remote work and overseas work policy
+    ├── equipment.md            Device and laptop refresh policy
+    ├── expenses.md             Expense reimbursement policy
+    └── travel.md               Business travel policy
+
+Quick Start
+===========
+
+1. Setup
+   pip install anthropic
+   export ANTHROPIC_API_KEY=your-key-here
+
+2. Run Tests
+   python3 test_agent.py
+   
+3. Try Demo
+   python3 demo.py
+   
+4. Interactive Mode
+   python3 agent.py
+
+5. (Optional) Run as API
+   pip install fastapi uvicorn
+   uvicorn api_example:app --reload
+
+Key Features
+============
+
+✓ Tool-based policy lookup with Claude
+✓ Agentic loop for multi-step reasoning
+✓ Extensible: just add more .md files to policies/
+✓ Well-tested: unit tests for core functionality
+✓ Documented: detailed README and implementation notes
+✓ Optional API: FastAPI wrapper for web service use
+
+Agent Behavior
+==============
+
+The agent uses Claude's tool use feature to:
+1. Accept user questions about HR policies
+2. Use the lookup_policy tool to fetch relevant policies
+3. Synthesize information into clear, accurate answers
+4. Continue the loop if more policies need consultation
+5. Return final answer to user
+
+The tool schema restricts policy names to an enum, ensuring the agent
+can only request policies that actually exist.

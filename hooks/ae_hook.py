@@ -4,11 +4,12 @@
 Usage:  ae_hook.py <event> --harness <claude|codex|cursor|gemini|opencode>
 
 Events:
-  session-start   inject a short LLM-project profile + pointer to the agent-engineer skill
+  session-start   inject a short LLM-project profile
+  prompt-submit   in an LLM project, name the agent-* skill(s) the request needs
   pre-write       deny file writes that contain likely API keys
   post-write      remember behaviour-changing edits (prompts, tools, agent config); remind once
-  post-bash       remember when an eval command ran
-  stop            if behaviour changed and no eval ran, ask the agent (once) to run evals
+  post-bash       remember when an eval command ran (not a script written this session)
+  stop            if behaviour changed and no eval ran, ask the agent (once) for honest evidence
 
 Contract: stdlib only, no network, never writes to the user's repo, fails open (any internal
 error → exit 0 with no output), and finishes well under the harness timeout.
@@ -111,6 +112,32 @@ READ_ONLY_COMMANDS = {"cat", "less", "more", "head", "tail", "ls", "tree", "grep
                       "cp", "mv", "rm", "ln", "chmod", "eval", "source", "."}
 COMMAND_WRAPPERS = {"sudo", "time", "env", "nice", "nohup", "exec", "command", "timeout"}
 SHELL_SEPARATORS = re.compile(r"&&|\|\||[;|&\n]")
+
+# Request wording → the skill that carries the checks for it. Order = priority.
+SKILL_HINTS = [
+    ("agent-accuracy", r"hallucinat|makes? (things |stuff )?up|invent|made[- ]up|wrong answers?|"
+                       r"inaccura|flaky|accuracy (dropped|is)"),
+    # Guardrails: the agent gains the power to act, or untrusted input reaches it.
+    ("agent-guardrails", r"(issue|process|make|send|execute|trigger|grant|approve)s? "
+                         r"([\w-]+ ){0,2}(refunds?|payments?|transfers?|e?mails?|money)|"
+                         r"\bdelete\b|write access|permissions?|prompt injection|jailbreak|"
+                         r"untrusted|malicious|private data|\bpii\b"),
+    ("agent-observability", r"\btrac(e|es|ing)\b|observab|monitor|"
+                            r"(see|tell|know) what .{0,30} doing"),
+    ("agent-tools", r"\btools?\b(?![/.\w])|function[- ]call|\bmcp\b"),
+    ("agent-prompting", r"\bprompts?\b|instructions|\btone\b|friendl|system message"),
+    ("agent-evals", r"\bevals?\b|is it better|(is|was) (the new|this|it) .*better|whether .*better|"
+                    r"\bjudge\b|test set|benchmark"),
+    ("agent-production", r"\bcosts?\b|cheaper|expensive|latency|\bslow\b|timeouts?|retr(y|ies)|"
+                         r"rollout|deploy|model (switch|upgrade|migration)|switch .*model|"
+                         r"loses? (all )?progress"),
+    ("agent-context", r"\bmemory\b|forget|context window|compaction"),
+    ("agent-rag", r"\brag\b|retriev|embedding|vector|chunk|knowledge base|our docs|"
+                  r"documents|polic(y|ies)"),
+    ("agent-design", r"(build|create|write|set up|start) (me )?(a|an|a new|new) ([\w-]+ ){0,3}"
+                     r"(agent|assistant|chatbot|bot)\b|multi-agent|architecture|from scratch"),
+]
+MAX_HINTED_SKILLS = 2
 
 
 def read_text(p: Path) -> str:
@@ -267,7 +294,8 @@ def load_state(session: str) -> dict:
             return json.loads(p.read_text())
     except (OSError, ValueError):
         pass
-    return {"changes": [], "evals": 0, "reminded": False, "gated": False}
+    return {"changes": [], "written": [], "evals": 0, "reminded": False, "gated": False,
+            "hinted": []}
 
 
 def save_state(session: str, state: dict) -> None:
@@ -332,6 +360,7 @@ class Event:
         self.file_paths = [self.file_path] if self.file_path else []
         self.file_paths += [m.strip() for m in PATCH_FILE.findall(self.write_text)
                             if m.strip() not in self.file_paths]
+        self.prompt = str(first(payload, "prompt", "user_prompt", default=""))
         self.stop_active = bool(payload.get("stop_hook_active") or payload.get("loop_count"))
 
 
@@ -342,8 +371,9 @@ def emit(harness: str, event: str, *, context: str = "", deny: str = "",
     """Print the harness-specific output. Exactly one of context/deny/block is set."""
     out: dict | None = None
     if harness in ("claude", "codex"):
-        name = {"session-start": "SessionStart", "pre-write": "PreToolUse",
-                "post-write": "PostToolUse", "post-bash": "PostToolUse"}.get(event)
+        name = {"session-start": "SessionStart", "prompt-submit": "UserPromptSubmit",
+                "pre-write": "PreToolUse", "post-write": "PostToolUse",
+                "post-bash": "PostToolUse"}.get(event)
         if deny:
             out = {"hookSpecificOutput": {"hookEventName": "PreToolUse",
                                           "permissionDecision": "deny",
@@ -419,30 +449,72 @@ def on_pre_write(ev: Event) -> dict:
                     "if this is a false positive."}
 
 
+def skills_for(prompt: str) -> list[str]:
+    text = prompt.lower()
+    return [skill for skill, pattern in SKILL_HINTS if re.search(pattern, text)]
+
+
+def on_prompt_submit(ev: Event) -> dict:
+    """Skills load from their descriptions on questions, but an imperative task ("add a
+    tool", "build an agent") goes straight to code. Name the skill next to the request."""
+    if not ev.prompt or os.environ.get("AE_SKILL_HINTS") == "off":
+        return {}
+    st = load_state(ev.session)
+    if "llm_project" not in st:
+        p = profile(ev.cwd)
+        st["llm_project"] = bool(p["llm"] or p["artifacts"] is not None)
+    skills = [s for s in skills_for(ev.prompt) if s not in st["hinted"]][:MAX_HINTED_SKILLS]
+    if not st["llm_project"] or not skills:
+        save_state(ev.session, st)
+        return {}
+    st["hinted"] += skills
+    save_state(ev.session, st)
+    names = " and ".join(f"`{s}`" for s in skills)
+    return {"context": f"[agent-engineer] This request changes the LLM agent. Load the {names} "
+                       f"skill{'s' if len(skills) > 1 else ''} before writing code: "
+                       f"{'they carry' if len(skills) > 1 else 'it carries'} the checks to "
+                       "apply. Skip this if the request turns out not to touch the agent."}
+
+
 def on_post_write(ev: Event) -> dict:
+    st = load_state(ev.session)
+    st["written"] += [p for p in ev.file_paths if p not in st["written"]]
     changed = [p for p in ev.file_paths
                if is_behaviour_change(p, ev.write_text)
                or is_behaviour_change(p, edit_context(ev.cwd / p, ev.write_text), PROMPT_MARKER)]
-    if not changed:
-        return {}
-    st = load_state(ev.session)
-    st["changes"] += [p for p in changed if p not in st["changes"]]
     msg = {}
-    if not st["reminded"]:
-        st["reminded"] = True
-        msg = {"context": f"[agent-engineer] {changed[0]} changes agent behaviour (prompt, "
-                          "tools or agent config). Before calling this an improvement: run "
-                          "the eval suite before/after and add an entry to "
-                          f"{ARTIFACT_DIR}/experiment-log.md (see agent-accuracy)."}
+    if changed:
+        st["changes"] += [p for p in changed if p not in st["changes"]]
+        if not st["reminded"]:
+            st["reminded"] = True
+            msg = {"context": f"[agent-engineer] {changed[0]} changes agent behaviour (prompt, "
+                              "tools or agent config). Only a real eval run shows whether that "
+                              "helped; report the result, or say it's unevaluated."}
     save_state(ev.session, st)
     return msg
+
+
+def runs_own_script(cmd: str, written: list[str], cwd: Path) -> bool:
+    """True if the command runs a file written this session (a script the agent just made
+    is not the project's eval suite: it may be a mock or a 'prediction')."""
+    for path in written:
+        p = Path(path)
+        names = {path, p.name}
+        try:
+            names.add(str(p.resolve().relative_to(cwd.resolve())))
+        except ValueError:
+            pass
+        if any(n and n in cmd for n in names):
+            return True
+    return False
 
 
 def on_post_bash(ev: Event) -> dict:
     if ev.command and is_eval_command(ev.command):
         st = load_state(ev.session)
-        st["evals"] += 1
-        save_state(ev.session, st)
+        if not runs_own_script(ev.command, st["written"], ev.cwd):
+            st["evals"] += 1
+            save_state(ev.session, st)
     return {}
 
 
@@ -456,13 +528,17 @@ def on_stop(ev: Event) -> dict:
     save_state(ev.session, st)
     files = ", ".join(st["changes"][:5])
     return {"block": f"[agent-engineer eval-gate] Behaviour-changing files were edited this "
-                     f"session ({files}) but no eval command ran. Run the eval suite and report "
-                     "the before/after result, or tell the user explicitly that the change is "
-                     "unevaluated and why. (This check fires once per session; disable with "
-                     "AE_EVAL_GATE=off.)"}
+                     f"session ({files}) and the project's evals never ran against the real "
+                     "model. Before you finish, make your final message honest about evidence: "
+                     "mocked, simulated, keyword-based or predicted results and offline unit "
+                     "tests show the code works, not that the agent got better, so don't call "
+                     "the change better, fixed or equivalent on that basis. Say it's unevaluated, "
+                     "why, and the one command that would measure it. Put this in your reply, "
+                     "not in new files. (Fires once per session; AE_EVAL_GATE=off disables.)"}
 
 
-HANDLERS = {"session-start": on_session_start, "pre-write": on_pre_write,
+HANDLERS = {"session-start": on_session_start, "prompt-submit": on_prompt_submit,
+            "pre-write": on_pre_write,
             "post-write": on_post_write, "post-bash": on_post_bash, "stop": on_stop}
 
 
