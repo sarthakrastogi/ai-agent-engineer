@@ -120,8 +120,7 @@ and run without the plugin *before* any plugin change made in response to the ex
 | 5 | `cheaper-model` *(held out)* | "Our support bot costs too much to run. Switch it to a cheaper model." | Input tokens dominate (a static 2K-token prompt), so prompt caching saves money with no quality risk; gate any model switch on evals |
 | 6 | `add-tracing` *(held out)* | "We can't tell what the inbox agent is doing in production. Add tracing." | A span per LLM and tool call, token usage, a standard (OTel GenAI), PII in email bodies, a correlation ID to find a customer's case |
 
-Every rubric item is in `evals/ab/tasks/<task>/rubric.json` on the
-[`eval-results`](https://github.com/sarthakrastogi/ai-agent-engineer/tree/eval-results/evals/ab/tasks) branch.
+Every rubric item is in [`evals/ab/tasks/<task>/rubric.json`](https://github.com/sarthakrastogi/ai-agent-engineer/blob/eval-results/evals/ab/tasks) on the `eval-results` branch.
 
 ### Results
 
@@ -158,7 +157,7 @@ xychart-beta
 Four tasks improved clearly. Tracing was already good without the plugin (79%). On the
 hallucination task the plugin made almost no difference, and v0.2.0 actually did better
 there (54%); see [What didn't get better](#what-didnt-get-better). The full per-item
-breakdown is in [`summary.md`](https://github.com/sarthakrastogi/ai-agent-engineer/blob/eval-results/evals/ab/results/summary.md) on the `eval-results` branch.
+breakdown is in [`evals/ab/results/summary.md`](https://github.com/sarthakrastogi/ai-agent-engineer/blob/eval-results/evals/ab/results/summary.md).
 
 ### What got better
 
@@ -319,7 +318,7 @@ flowchart LR
    checked by hand, it was right in all 5 clear-cut cases; 2 more were borderline. It and
    judge v2 agree on 85% of items.
 
-Judge v2 results are kept in [`summary-judge.md`](https://github.com/sarthakrastogi/ai-agent-engineer/blob/eval-results/evals/ab/results/summary-judge.md) for comparison. Both graders
+Judge v2 results are kept in [`evals/ab/results/summary-judge.md`](https://github.com/sarthakrastogi/ai-agent-engineer/blob/eval-results/evals/ab/results/summary-judge.md). Both graders
 show the plugin ahead; the auditor's effect is smaller.
 
 **Other threats to validity:**
@@ -616,8 +615,7 @@ flowchart TD
 
 ## Reproducing the experiment
 
-Everything is in `evals/ab/` on the [`eval-results`](https://github.com/sarthakrastogi/ai-agent-engineer/tree/eval-results) branch, which holds the
-development side of the repo. `main` holds only what the plugin installs.
+The full experiment, runs, and scripts are in [`evals/ab/`](https://github.com/sarthakrastogi/ai-agent-engineer/tree/eval-results/evals/ab) on the `eval-results` branch.
 
 ```text
 evals/ab/
@@ -627,11 +625,10 @@ evals/ab/
 ├── run_ab.py                  runs both arms, records cost/time/tests/skills
 ├── grade_ab.py                judge v2: blinded two-judge grading with tie-break
 ├── report_ab.py               summary.md (auditor) / summary-judge.md, with bootstrap CIs
-└── results/<task>/<arm>-<n>/  project, diff, run.json, audit.json, grade.json per run
+└── results/<task>/<arm>-<n>/  per-run folders: project, diff, run.json, audit.json, grade.json
 ```
 
 ```bash
-git checkout eval-results
 export CLAUDE_BIN=claude                     # path to the Claude Code binary if not on PATH
 python3 evals/ab/run_ab.py --runs 3 --jobs 4 # ~$10–15, ~30 min
 python3 evals/ab/grade_ab.py --jobs 4        # judge v2, ~2.2 calls per run
@@ -641,13 +638,11 @@ python3 evals/ab/report_ab.py --grader judge # judge v2 grades
 
 Runs are skipped if their results already exist, so you can add tasks or runs
 incrementally. The auditor pass (`audit.json`) was run with Claude Code subagents on blinded
-copies of each run; [evals/ab/README.md](https://github.com/sarthakrastogi/ai-agent-engineer/blob/eval-results/evals/ab/README.md) describes how to repeat it.
+copies of each run; [`evals/ab/README.md`](https://github.com/sarthakrastogi/ai-agent-engineer/blob/eval-results/evals/ab/README.md) describes how.
 
-Raw transcripts aren't committed anywhere, since they contain local paths and session
-metadata.
+Raw transcripts aren't committed; they contain local paths and session metadata.
 
-The same branch has a cheaper **routing eval** (`evals/run_routing.py`, 34 prompts) that
-checks whether each request loads the right skill, and 42 unit tests for the hooks.
+The same branch has a cheaper **routing eval** (`evals/run_routing.py`, 34 prompts) and 42 unit tests.
 
 ---
 
@@ -673,7 +668,6 @@ temp directory.
 and the model could disarm the gate with a mock eval it wrote itself. See
 [How the experiment changed the plugin](#how-the-experiment-changed-the-plugin).
 
-**How do I contribute?** Work from the [`eval-results`](https://github.com/sarthakrastogi/ai-agent-engineer/tree/eval-results) branch, which has the tests and
-build scripts. Read its [AUTHORING.md](https://github.com/sarthakrastogi/ai-agent-engineer/blob/eval-results/docs/AUTHORING.md), then run `python3
-scripts/validate.py --strict`, the unit tests and `python3 scripts/build_adapters.py --check`
+**How do I contribute?** Fetch the [`eval-results`](https://github.com/sarthakrastogi/ai-agent-engineer/tree/eval-results) branch for tests and scripts. Read
+[AUTHORING.md](https://github.com/sarthakrastogi/ai-agent-engineer/blob/eval-results/docs/AUTHORING.md), then run `python3 scripts/validate.py --strict` and the tests
 before opening a PR. Add an A/B task if you change behaviour.

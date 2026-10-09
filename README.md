@@ -118,6 +118,6 @@ Configure the hooks with environment variables:
 
 ## Developing the pack
 
-`main` contains only what the plugin installs. Tests, build scripts, the routing eval and
-the A/B experiment are on the [`eval-results`](https://github.com/sarthakrastogi/ai-agent-engineer/tree/eval-results) branch, with a contributor guide in
-[docs/AUTHORING.md](https://github.com/sarthakrastogi/ai-agent-engineer/blob/eval-results/docs/AUTHORING.md).
+To develop or run evals, work from the [`eval-results`](https://github.com/sarthakrastogi/ai-agent-engineer/tree/eval-results) branch, which has tests,
+build scripts, and the full A/B experiment. See its [AUTHORING.md](https://github.com/sarthakrastogi/ai-agent-engineer/blob/eval-results/docs/AUTHORING.md)
+for contributor setup.
